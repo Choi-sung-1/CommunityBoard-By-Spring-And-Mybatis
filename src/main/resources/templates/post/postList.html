@@ -44,7 +44,7 @@
                             <li th:each="i : ${#numbers.sequence(1, totalPages)}">
                                 <a th:href="@{/post/list(page=${i})}"
                                    th:text="${i}"
-                                   th:classappend="${i == currentPage ? 'active' : ' '}">1</a>
+                                   th:classappend="${i == currentPage ? 'active' : ''}">1</a>
                             </li>
                         </ul>
                     </div>

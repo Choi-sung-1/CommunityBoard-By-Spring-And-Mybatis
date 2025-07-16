@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.toyProject.mapper.PostLikeStatusMapper">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO TBL_POST_LIKE_STATUS(POST_LIKE_STATUS, MEMBER_ID, POST_ID)
+        VALUES ( #{postLikeStatus},#{memberId},#{postId} )
+    </insert>
+    <select id="selectPostLikeStatus">
+        SELECT * FROM TBL_POST_LIKE_STATUS
+        WHERE MEMBER_ID=#{memberId} AND POST_ID=#{postId}
+    </select>
+    <update id="update">
+        UPDATE TBL_POST_LIKE_STATUS
+        SET POST_LIKE_STATUS=#{postLikeStatus}
+        WHERE POST_ID=#{postId} AND MEMBER_ID=#{memberId}
+    </update>
+</mapper>

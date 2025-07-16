@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>마이페이지</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <style>
+        .card-header, .card-body .info-row{
+            border-style: solid;
+        }
+    </style>
+</head>
+
+<body>
+<div>
+    <div style="border-style: solid">
+        <div class="card-header">
+            👥 마이페이지
+        </div>
+        <div class="card-body" th:object="${memberProfile}">
+            <div class="info-row">
+                <label for="profileImage">이미지</label>
+                    <div>
+                        <div th:text="${filePath}"></div>
+                        <img th:src="${filePath}" alt="프로필 이미지" id="profileImage"/>
+                    </div>
+                <label for="oneLineBio">한줄 소개</label>
+                <div th:text="*{profileOneLineBio}" id="oneLineBio">한줄 소개</div>
+            </div>
+            <div class="info-row">
+                <div>이름</div>
+                <div th:text="*{memberName}">홍길동</div>
+            </div>
+            <div class="info-row">
+                <div>아이디</div>
+                <div th:text="*{memberLoginId}">exampleId</div>
+            </div>
+            <div class="info-row">
+                <div>이메일</div>
+                <div th:text="*{memberEmail}">example@example.com</div>
+            </div>
+            <div class="info-row">
+                <div>생년월일</div>
+                <div th:text="*{memberBirth}">1990-01-01</div>
+            </div>
+            <div class="info-row">
+                <div>전화번호</div>
+                <div th:text="*{memberPhone}">010-1234-5678</div>
+            </div>
+
+            <div class="btn-group-custom">
+                <a type="button" th:href="@{/}">홈 화면</a>
+                <a type="button" th:href="@{/member/profile/edit/{memberId}(memberId=${memberId})}"> 수정하기</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.toyProject.mapper.ProfileMapper">
+    <insert id="insertProfile" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO TBL_PROFILE(PROFILE_ONE_LINE_BIO, MEMBER_ID)
+        VALUES(#{profileOneLineBio},#{memberId})
+    </insert>
+    <select id="selectMemberProfile">
+        SELECT
+            M.ID AS id,
+            PF.PROFILE_ONE_LINE_BIO AS profileOneLineBio,
+            M.MEMBER_NAME AS memberName,
+            M.MEMBER_LOGIN_ID AS memberLoginId,
+            M.MEMBER_BIRTH AS memberBirth,
+            M.MEMBER_EMAIL AS memberEmail,
+            M.MEMBER_PHONE AS memberPhone,
+            F.FILE_TYPE AS fileType,
+            F.FILE_ORIGINAL_NAME AS fileOriginalName,
+            F.REFERENCE_ID AS referenceId
+        FROM TBL_PROFILE PF
+                 INNER JOIN TBL_MEMBER M ON M.ID = PF.MEMBER_ID
+                 LEFT JOIN TBL_FILE F ON F.REFERENCE_ID = PF.MEMBER_ID AND F.FILE_TYPE = 'PROFILE'
+        WHERE M.ID = #{memberId}
+    </select>
+    <update id="updateProfile">
+        UPDATE TBL_PROFILE
+        SET PROFILE_ONE_LINE_BIO=#{profileOneLineBio}
+        WHERE MEMBER_ID=#{id}
+    </update>
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.toyProject.mapper.PostMapper">
+    <insert id="insert"
+            parameterType="com.project.toyProject.domain.vo.PostVO"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO TBL_POST
+            (POST_TITLE,POST_CONTENT,POST_REGISTER_DATE,POST_UPDATE_DATE,POST_LIKE_COUNT,POST_READ_COUNT,MEMBER_ID)
+        VALUES
+            (#{postTitle},#{postContent},#{postRegisterDate},#{postUpdateDate},#{postLikeCount},#{postReadCount},#{memberId})
+    </insert>
+    <select id="selectAllPost">
+        SELECT P.ID,POST_TITLE,MEMBER_LOGIN_ID,POST_REGISTER_DATE,POST_READ_COUNT,POST_UPDATE_DATE FROM TBL_POST P
+        INNER JOIN TBL_MEMBER M ON P.MEMBER_ID=M.ID
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+    <select id="selectPostById" >
+        SELECT P.ID, P.POST_TITLE, P.POST_CONTENT, P.POST_LIKE_COUNT, M.MEMBER_LOGIN_ID
+        FROM TBL_POST P
+                 INNER JOIN TBL_MEMBER M ON P.MEMBER_ID = M.ID
+        WHERE P.ID = #{id}
+    </select>
+
+    <update id="updateReadCount">
+        UPDATE TBL_POST
+        SET POST_READ_COUNT =POST_READ_COUNT+1
+        WHERE ID=#{id}
+    </update>
+    <update id="updatePost">
+        UPDATE TBL_POST
+        SET POST_TITLE=#{postTitle},POST_CONTENT=#{postContent},POST_UPDATE_DATE=#{postUpdateDate}
+        WHERE ID = #{id}
+    </update>
+    <update id="updateLikeCount">
+        UPDATE TBL_POST
+        <choose>
+            <when test="likeButtonStatus == 'onClick'">
+                SET POST_LIKE_COUNT = POST_LIKE_COUNT + 1
+            </when>
+            <when test="likeButtonStatus == 'noneClick'">
+                SET POST_LIKE_COUNT = POST_LIKE_COUNT - 1
+            </when>
+        </choose>
+        WHERE ID = #{id}
+    </update>
+
+    <select id="selectPostLikeCount">
+        SELECT POST_LIKE_COUNT FROM TBL_POST
+        WHERE ID=#{id}
+    </select>
+
+    <delete id="deletePostById">
+        DELETE FROM TBL_POST
+        WHERE ID=#{id}
+    </delete>
+    <select id="selectAllPostCount">
+        SELECT COUNT(*) FROM TBL_POST
+    </select>
+</mapper>

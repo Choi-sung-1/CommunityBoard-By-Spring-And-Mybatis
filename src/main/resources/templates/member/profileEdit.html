@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>마이페이지</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <style>
+        .card-header, .card-body .info-row{
+            border-style: solid;
+        }
+    </style>
+</head>
+
+<body>
+<div style="border-style: solid">
+    <div class="card-header">
+        👥 마이페이지
+    </div>
+    <!-- 🔽 form을 card-body 바깥에 둠 -->
+    <form method="post" enctype="multipart/form-data"
+          th:action="@{/member/profile/edit/{memberId}(memberId=${memberId})}">
+        <div class="card-body" th:object="${memberProfile}">
+            <!-- 프로필 이미지 있을 때 -->
+            <div class="info-row">
+                <label for="profileImage">이미지</label>
+                <div>
+                    <img th:src="${filePath}" src="첨부 이미지" alt="" id="profileImage" style="max-width:150px;" />
+                </div>
+                <div>
+                    <input type="file" name="profileImage" id="pfImage" accept="image/*" onchange="previewImage(event)"/>
+                </div>
+                <div id="previewCard" class="p-3 text-center">
+                    <img id="preview" src="" alt="미리보기 이미지" class="img-fluid rounded"/>
+                </div>
+            </div>
+
+            <!-- 한줄 소개 수정 가능하도록 -->
+            <div class="info-row">
+                <div>한줄소개</div>
+                <input type="text" id="profileOneLineBio" name="profileOneLineBio"
+                       th:value="*{profileOneLineBio}" />
+            </div>
+
+            <!-- 다른 정보는 읽기 전용 -->
+            <div class="info-row" >
+                <div>이름</div>
+                <input th:field="*{memberName}"/>
+            </div>
+            <div class="info-row">
+                <div>아이디</div>
+                <input type="text" th:field="*{memberLoginId}" readonly/>
+            </div>
+            <div class="info-row">
+                <div>이메일</div>
+                <input type="email" th:field="*{memberEmail}" readonly/>
+            </div>
+            <div class="info-row">
+                <div>생년월일</div>
+                <div th:text="*{memberBirth}"  readonly="">1990-01-01</div>
+            </div>
+            <div class="info-row">
+                <div>전화번호</div>
+                <input type="text" th:field="*{memberPhone}"/>
+            </div>
+
+            <!-- 수정 버튼 -->
+            <div class="info-row">
+                <button type="submit" class="btn btn-primary">수정하기</button>
+                <button th:onclick="|location.href='@{/member/profile'|" type="submit" class="btn btn-primary">취소</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+
+<script>
+    function previewImage(event){
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function (e){
+            const preview = document.getElementById("preview");
+            const previewCard = document.getElementById("previewCard");
+            preview.src = e.target.result;
+            previewCard.style.display="block";
+        };
+        if(file){
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+</html>

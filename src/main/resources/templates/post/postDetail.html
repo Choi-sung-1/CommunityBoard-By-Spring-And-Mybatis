@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" rel="stylesheet">
+    <title>게시글</title>
+</head>
+<body>
+<div >
+    <div>
+        <h2>📌 게시글</h2>
+        <div th:if="${loginUser!=null}">
+            <span>
+                    👤 로그인 사용자: <span th:text="${loginUser.memberLoginId}">사용자</span>
+            </span>
+            <span>
+                    ✍️ 작성자: <span th:text="${post.memberLoginId}">작성자</span>
+            </span>
+        </div>
+        <div th:if="${loginUser==null}">
+            <span>⚠️ 로그인 후 이용해주세요.</span>
+        </div>
+
+        <form id="postForm" action="/post" method="post" th:object="${post}">
+            <div id="postId" th:attr="data-post-id=${post.id}" hidden="hidden"></div>
+            <div id="memberId" th:if="${loginUser}!=null" th:attr="data-member-id=${loginUser.id}" hidden="hidden"></div>
+            <div>
+                <label for="postTitle">제목</label>
+                <input type="text" id="postTitle"
+                       th:field="*{postTitle}" readonly>
+            </div>
+
+            <div th:if="!${post.fileList.isEmpty()}">
+                <label for="viewCard">이미지</label>
+                <div th:each="file : ${post.fileList}">
+                    <div th:text="@{|/postImages/${file.fileOriginalName}|}"></div>
+                    <img th:src="@{|/postImages/${file.fileOriginalName}|}" id="viewCard" style="max-width: 200px;" />
+                </div>
+            </div>
+            <div>
+                <label for="postContent">내용</label>
+                <div>
+                    <textarea th:text="*{postContent}" id="postContent" rows="6" readonly></textarea>
+                </div>
+            </div>
+            <div>
+                <button id="likeButton" type="button" onclick="onClickLikeButton()">
+                    ❤️ <span th:text="*{postLikeCount}" id="likeCount">0</span>
+                </button>
+            </div>
+            <hr class="my-4">
+
+            <!-- 댓글 작성 폼 -->
+            <div class="mb-3" th:if="${loginUser!=null}">
+                <label for="commentContent">💬 댓글 작성</label>
+                    <div>
+                        <textarea id="commentContent" rows="3" placeholder="댓글을 입력하세요..."></textarea>
+                    </div>
+
+                <div>
+                    <button id="commentButton" type="button" onclick="onClickCommentButton()">댓글 작성</button>
+                </div>
+            </div>
+
+            <!-- 댓글 목록 -->
+            <div id="commentList">
+                <h5>📝 댓글 목록</h5>
+                <div class="commentBox" th:each="comment:${comments}" th:attr="data-comment-id=${comment.id}">
+                    <div>
+                        <strong th:text="${comment.commentWriterName}">작성자</strong>
+                        <small th:text="${comment.getCommentRegisterDate()}">날짜</small>
+                        <button th:if="${loginUser != null and post != null  and loginUser.memberLoginId == comment.commentWriterName}"
+                                type="button"
+                                onclick="deleteComment(this)">
+                            🗑 삭제
+                        </button>
+                    </div>
+                    <textarea th:text="${comment.commentContent}">댓글 내용</textarea>
+                </div>
+
+            </div>
+
+            <div>
+                <div th:if="${loginUser != null} and ${loginUser.memberLoginId} == ${post.memberLoginId}">
+                    <a th:href="@{/post/edit/{postId}(postId=${post.id})}">️✏️ 수정</a>
+                </div>
+                <div th:if="${loginUser != null} and ${loginUser.memberLoginId} == ${post.memberLoginId}">
+                    <a th:href="@{/post/delete/{postId}(postId=${post.id})}" onclick="return deleteOnclick()">️❌ 삭제</a>
+                </div>
+                <div>
+                    <button type="button" th:onclick="|location.href='@{/post/list}'|">
+                        📋 목록
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+<script>
+<!--    true면 클릭되어있고,false면 클릭되어있지않음.-->
+//좋아요 버튼 클릭
+    let liked = false;
+function onClickLikeButton(){
+        let likeButtonStatus = liked ? 'onClick' : 'noneClick';
+
+        let likeCount = document.getElementById('likeCount');
+        const postId = document.getElementById('postId').dataset.postId;
+        const memberId = document.getElementById('memberId').dataset.memberId;
+        console.log(likeButtonStatus,likeCount,postId,memberId);
+
+        // likeCount.textContent = 'likeCount';
+        fetch('/post/like',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({
+                postId: Number(postId), //value값은 string으로 들어가기 때문에 pk인 postId는 캐스팅해줘야함
+                memberId: Number(memberId),
+                likeButtonStatus:likeButtonStatus
+            })
+        }).then(response => response.json())
+                .then(data=>{
+                likeCount.textContent=data.likeCount;
+            })
+        updateLikeButtonStyle(likeButtonStatus)
+    }
+//게시글 삭제 컨펌
+function deleteOnclick() {
+    return confirm("정말 삭제하시겠습니까?");
+}
+// 댓글 작성
+function onClickCommentButton() {
+    let commentContent = document.getElementById('commentContent').value;
+    const postId =document.getElementById('postId').dataset.postId;
+    const memberId =document.getElementById('memberId').dataset.memberId
+
+    fetch('/comment/add',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+            postId:Number(postId),
+            memberId:Number(memberId),
+            commentContent:commentContent
+        })
+    }).then(response=>response.json())
+        .then(comment=>{
+            appendCommentList(comment);
+            document.getElementById('commentContent').value ="";
+
+        })
+}
+// 댓글 요소 추가
+function appendCommentList(comment){
+    const commentList = document.getElementById('commentList');
+    const commentBox = document.createElement("div");
+    commentBox.classList.add("commentBox");
+    commentBox.dataset.commentId = comment.id;
+
+    const topRow = document.createElement("div");
+
+    const writerInfo = document.createElement("div");
+    const strong = document.createElement("strong");
+    strong.textContent = comment.commentWriterName;
+    const small = document.createElement("small");
+    small.textContent = comment.commentRegisterDate;
+
+    writerInfo.appendChild(strong);
+    writerInfo.appendChild(small);
+
+    topRow.appendChild(writerInfo);
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "🗑 삭제";
+    deleteButton.setAttribute("onclick","deleteComment(this)");
+    writerInfo.appendChild(deleteButton);
+
+    const contentDiv = document.createElement("textarea");
+    contentDiv.textContent = comment.commentContent;
+
+    commentBox.appendChild(topRow);
+    commentBox.appendChild(contentDiv);
+
+    commentList.appendChild(commentBox);
+}
+// 댓글 삭제
+function deleteComment(button) {
+    const commentBox = button.closest('.commentBox'); // 가장 가까운 부모 div 찾기
+    const commentId = commentBox.dataset.commentId;
+
+    fetch(`/comment/delete/${commentId}`, {
+        method: 'DELETE'
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error("삭제 실패");
+        }
+        return response.json(); // OK 응답일 경우
+    });
+    commentBox.remove();
+//     삭제는되는데 비동기로 삭제가안됨
+}
+
+</script>

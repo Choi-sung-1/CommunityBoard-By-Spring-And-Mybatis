@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" rel="stylesheet">
+  <title>게시글 수정</title>
+</head>
+<body>
+<div>
+  <div>
+    <h2>✏️ 게시글 수정</h2>
+    <div>
+            <span>
+                👤 로그인 사용자: <span th:text="${loginUser.memberLoginId}">사용자</span>
+            </span>
+            <span>
+                ✍️ 작성자: <span th:text="${post.memberLoginId}">작성자</span>
+            </span>
+    </div>
+
+    <form id="postForm" method="post" th:object="${post}">
+      <!-- 제목 -->
+      <div>
+        <label for="postTitle">제목</label>
+        <input type="text" id="postTitle" placeholder="제목을 입력해주세요." th:field="*{postTitle}">
+      </div>
+      <!-- 이미지 -->
+      <div>
+        <label for="viewCard">이미지</label>
+        <div th:each="file : ${post.fileList}">
+          <div th:text="@{|/postImages/${file.fileOriginalName}|}"></div>
+          <img th:src="@{|/postImages/${file.fileOriginalName}|}" id="viewCard" style="max-width: 200px;" />
+        </div>
+      </div>
+
+      <!-- 내용 -->
+      <div>
+        <label for="postContent">내용</label>
+        <div>
+          <textarea id="postContent" name="content"
+                    rows="6"
+                    placeholder="내용을 입력해주세요."
+                    th:field="*{postContent}"
+          ></textarea>
+      </div>
+      </div>
+
+      <!-- 버튼 -->
+      <div>
+        <div>
+          <button type="submit" id="submitButton">✔️ 저장</button>
+        </div>
+        <div>
+          <a th:href="@{/post/detail/setup/{postId}(postId=${post.id})}">️❌ 취소</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

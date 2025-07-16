@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>게시글 작성</title>
+    <link th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div>
+    <h2>📝 게시글 작성</h2>
+
+    <h4 th:if="${loginMember == null}" >로그인 후 이용해주세요.</h4>
+    <h4 th:if="${loginMember != null}" th:text="|로그인 사용자 : ${loginMember.memberLoginId}|">로그인 사용자</h4>
+    <form id="postForm" name="postForm" method="post" th:object="${postVO}" enctype="multipart/form-data">
+        <!-- 제목 -->
+        <div>
+            <label for="postTitle">제목</label>
+            <input th:field="*{postTitle}" type="text" id="postTitle" class="form-control" placeholder="제목을 입력해주세요.">
+        </div>
+        <!-- 이미지 업로드 -->
+        <div >
+            <label for="imageInput">이미지 첨부</label>
+            <input type="file" id="imageInput" name="imageFiles" accept="image/*" multiple onchange="previewImages(event)">
+            <div id="previewCard"></div>
+
+        </div>
+        <!-- 내용 -->
+        <div class="form-group">
+            <label for="postContent">내용</label>
+            <div>
+            <textarea id="postContent" rows="6" th:field="*{postContent}"
+                      placeholder="내용을 2글자 이상 입력해주세요."></textarea>
+            </div>
+
+        </div>
+        <hr class="my-4">
+        <!-- 버튼 영역 -->
+        <div>
+            <div>
+                <button type="submit" id="submitButton">작성하기</button>
+            </div>
+            <div>
+                <a href="#" th:href="@{/post/list}">목록으로</a>
+            </div>
+        </div>
+    </form>
+</div>
+    <script>
+        function previewImages(event) {
+        const files = event.target.files;
+        const previewCard = document.getElementById("previewCard");
+        previewCard.innerHTML = ""; // 이전 미리보기 초기화
+
+        Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        img.className = "img-fluid rounded m-1";
+        img.style.maxWidth = "200px";
+        previewCard.appendChild(img);
+    };
+        reader.readAsDataURL(file);
+    });
+    }
+</script>
+</body>
+</html>

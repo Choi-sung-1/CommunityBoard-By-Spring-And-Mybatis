@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>게시글 목록</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+</head>
+<body>
+<div>
+    <h2>📌 게시글 목록</h2>
+    <div>
+        <!-- 게시글 목록 -->
+        <div>
+            <div>
+                <div >
+                    <table style="border-style: solid">
+                        <thead>
+                            <tr>
+                                <th>번호</th>
+                                <th>제목</th>
+                                <th>작성자</th>
+                                <th>조회수</th>
+                                <th>작성일</th>
+                                <th>최근 수정일</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="post,stat : ${posts}">
+                                <td th:text="${stat.count}">1</td>
+                                <td><a th:text="${post.postTitle}" th:href="@{/post/detail/{postId}(postId=${post.id})}"/</td>
+                                <td th:text="${post.memberLoginId}">작성자</td>
+                                <td th:text="${post.postReadCount}">10</td>
+                                <td th:text="${post.formattedPostRegisterDate}">2025-05-01</td>
+                                <td th:text="${post.formattedPostUpdateDate}">2025-05-18</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+<!--                페이징 처리-->
+                <nav>
+                    <div>
+                        <ul>
+                            <li th:each="i : ${#numbers.sequence(1, totalPages)}">
+                                <a th:href="@{/post/list(page=${i})}"
+                                   th:text="${i}"
+                                   th:classappend="${i == currentPage ? 'active' : ''}">1</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </nav>
+            </div>
+        </div>
+        <!-- 사이드바 회원 정보-->
+        <div>
+            <div th:if="${loginMember!=null}">
+                <div>
+                    <strong th:text="|로그인 사용자:${loginMember.memberLoginId}|">로그인 사용자</strong>
+                </div>
+                <a th:href="@{/member/profile}">마이 페이지</a>
+                <a th:href="@{/post/write}">➕ 새 글 작성</a>
+                <a th:href="@{/member/logout}">🚪 로그아웃</a>
+            </div>
+            <div>
+                <div th:if="${loginMember==null}">
+                    <p>⚠️ 로그인 후 이용해주세요.</p>
+                    <a th:href="@{/member/login}">로그인</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

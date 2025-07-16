@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>홈 화면</title>
+    <link th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div>
+    <h1>홈 화면</h1>
+
+    <div>
+        <div th:if="${loginMember ==null}">⚠️ 로그인 후 이용해주세요.</div>
+        <div th:if="${loginMember!= null}">👤 로그인 사용자: <span th:text="${loginMember.memberLoginId}">사용자 이름</span></div>
+    </div>
+
+    <div>
+        <button th:onclick="|location.href='@{/member/join}'|">
+            <div>📝</div>
+            회원가입
+        </button>
+
+        <button th:onclick="|location.href='/member/login'|">
+            <div>🔐</div>
+            로그인
+        </button>
+        <button th:if="${loginMember!=null}" th:onclick="|location.href='/member/profile'|">
+            <div>👤</div>
+            회원정보
+        </button>
+
+        <button th:onclick="|location.href='/post/list'|">
+            <div>📄</div>
+            게시글
+        </button>
+        <a th:if="${loginMember !=null}" th:href="@{/member/logout}">
+            🚪 로그아웃
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -28,7 +28,7 @@
                         <tbody>
                             <tr th:each="post,stat : ${posts}">
                                 <td th:text="${stat.count}">1</td>
-                                <td><a th:text="${post.postTitle}" th:href="@{/post/detail/{postId}(postId=${post.id})}"/</td>
+                                <td><a th:text="${post.postTitle}" th:href="@{/post/detail/{postId}(postId=${post.id})}"/></td>
                                 <td th:text="${post.memberLoginId}">작성자</td>
                                 <td th:text="${post.postReadCount}">10</td>
                                 <td th:text="${post.formattedPostRegisterDate}">2025-05-01</td>

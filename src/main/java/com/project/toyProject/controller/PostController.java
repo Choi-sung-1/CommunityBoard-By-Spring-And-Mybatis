@@ -29,7 +29,7 @@ public class PostController {
     private final PostServiceImpl postService;
     private final PostLikeStatusServiceImpl postLikeStatusService;
     private final CommentServiceImpl commentService;
-    public final static int LIMIT = 2;
+    public final static int LIMIT = 10;
 
     //    게시글 목록
     @GetMapping("/list")
@@ -38,11 +38,16 @@ public class PostController {
         MemberVO loginMember = memberService.findMemberById((Long)session.getAttribute("sessionId"));
         int totalCount = postService.selectAllPostCount();
         int totalPages = (int)Math.ceil((double)totalCount /LIMIT);
+        int blockSize = 5;
+        int startPage = Math.max(1,page-2);
+        int endPage = Math.min(totalPages,startPage+blockSize-1);
 
-        model.addAttribute("posts",posts);
         model.addAttribute("currentPage",page);
         model.addAttribute("totalPages",totalPages);
+        model.addAttribute("startPage",startPage);
+        model.addAttribute("endPage",endPage);
         model.addAttribute("loginMember",loginMember);
+        model.addAttribute("posts",posts);
         return "/post/postList";
     }
 

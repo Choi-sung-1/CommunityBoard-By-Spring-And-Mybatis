@@ -40,11 +40,17 @@
 <!--                페이징 처리-->
                 <nav>
                     <div>
-                        <ul>
-                            <li th:each="i : ${#numbers.sequence(1, totalPages)}">
+                        <ul class="pagination">
+                            <li th:if="${currentPage>1}">
+                                <a th:href="@{/post/list(page=${currentPage -1})}">« 이전</a>
+                            </li>
+                            <li th:each="i : ${#numbers.sequence(startPage,endPage)}" class="page-item">
                                 <a th:href="@{/post/list(page=${i})}"
-                                   th:text="${i}"
-                                   th:classappend="${i == currentPage ? 'active' : ''}">1</a>
+                                   th:text="|${i}|" class="page-link m-1"
+                                   th:classappend="${i == currentPage ? 'border-danger' : ''}">1</a>
+                            </li>
+                            <li th:if="${currentPage<totalPages}">
+                                <a th:href="@{/post/list(page=${currentPage+1})}">다음 »</a>
                             </li>
                         </ul>
                     </div>

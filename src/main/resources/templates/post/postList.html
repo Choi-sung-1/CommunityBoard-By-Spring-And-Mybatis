@@ -8,7 +8,7 @@
 </head>
 <body>
 <div>
-    <h2>📌 게시글 목록</h2>
+    <h2><a th:href="@{/post/list}" style="text-decoration: none">📌 게시글 목록</a></h2>
     <div>
         <!-- 게시글 목록 -->
         <div>
@@ -23,9 +23,11 @@
                         <input type="text" name="keyword" placeholder="검색어를 입력하세요.">
                         <button type="submit">검색</button>
                     </form>
+                </div>
                     <div th:if="${#lists.isEmpty(posts)}">
                         <p>게시글이 없습니다.</p>
                     </div>
+
                     <table style="border-style: solid" th:unless="${#lists.isEmpty(posts)}">
                         <thead>
                             <tr>

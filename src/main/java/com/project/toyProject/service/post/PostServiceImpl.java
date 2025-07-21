@@ -6,6 +6,7 @@ import com.project.toyProject.dao.PostDAO;
 import com.project.toyProject.domain.dto.post.PostDetailDTO;
 import com.project.toyProject.domain.dto.post.PostEditDTO;
 import com.project.toyProject.domain.dto.post.PostListDTO;
+import com.project.toyProject.domain.dto.post.PostSearchDTO;
 import com.project.toyProject.domain.vo.FileVO;
 import com.project.toyProject.domain.vo.PostVO;
 import jakarta.servlet.http.HttpSession;
@@ -46,8 +47,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostListDTO> findAllPosts(Map<String, Object> searchMap) {
-        return postDAO.selectAllPost(searchMap);
+    public List<PostListDTO> findAllPosts(PostSearchDTO postSearchDTO) {
+        return postDAO.selectAllPost(postSearchDTO);
     }
 
     @Override
@@ -90,8 +91,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public int selectAllPostCount(Map<String, Object> searchMap) {
-        return postDAO.selectAllPostCount(searchMap);
+    public int selectAllPostCount(PostSearchDTO postSearchDTO) {
+        return postDAO.selectAllPostCount(postSearchDTO);
     }
 
 

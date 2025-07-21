@@ -2,6 +2,7 @@ package com.project.toyProject.controller;
 
 import com.project.toyProject.domain.dto.post.PostEditDTO;
 import com.project.toyProject.domain.dto.post.PostListDTO;
+import com.project.toyProject.domain.dto.post.PostSearchDTO;
 import com.project.toyProject.domain.vo.MemberVO;
 import com.project.toyProject.domain.vo.PostLikeStatusVO;
 import com.project.toyProject.domain.vo.PostVO;
@@ -18,7 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,19 +40,19 @@ public class PostController {
                            @RequestParam(required = false) String keyword,
                            Model model,HttpSession session) {
 //      게시글 검색
-        Map<String,Object> searchMap = new HashMap<>();
-        searchMap.put("type",type);
-        searchMap.put("keyword",keyword);
-        searchMap.put("page",page);
-        searchMap.put("startRow",(page-1)*PAGE_SIZE);
-        searchMap.put("pageSize",PAGE_SIZE);
+        PostSearchDTO postSearchDTO = new PostSearchDTO();
+        postSearchDTO.setType(type);
+        postSearchDTO.setKeyword(keyword);
+        postSearchDTO.setPage(page);
+        postSearchDTO.setStartRow((page-1)*PAGE_SIZE);
+        postSearchDTO.setPageSize(PAGE_SIZE);
 
 //        서비스로직 실행
-        List<PostListDTO> posts = postService.findAllPosts(searchMap);
+        List<PostListDTO> posts = postService.findAllPosts(postSearchDTO);
         MemberVO loginMember = memberService.findMemberById((Long)session.getAttribute("sessionId"));
 
 //        페이징 처리
-        int totalCount = postService.selectAllPostCount(searchMap);
+        int totalCount = postService.selectAllPostCount(postSearchDTO);
         int totalPages = (totalCount==0)? 1:(int)Math.ceil((double) totalCount/PAGE_SIZE);
         int blockSize = 5;
         int startPage = Math.max(1,page-2);

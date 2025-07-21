@@ -80,7 +80,7 @@
                             🗑 삭제
                         </button>
                     </div>
-                    <textarea th:text="${comment.commentContent}">댓글 내용</textarea>
+                    <textarea th:text="${comment.commentContent}" readonly >댓글 내용</textarea>
                 </div>
 
             </div>
@@ -107,8 +107,6 @@
     document.addEventListener("DOMContentLoaded", function () {
         const likeStatusElement = document.getElementById("likeStatus");
         const likeStatus = likeStatusElement.dataset.likeStatus;
-
-        console.log("초기 좋아요 상태:", likeStatus); // 로그로 확인해보기
         updateLikeButtonStyle(likeStatus);
     });
 
@@ -190,6 +188,7 @@ function appendCommentList(comment){
     writerInfo.appendChild(deleteButton);
 
     const contentDiv = document.createElement("textarea");
+    contentDiv.setAttribute("readonly",true);
     contentDiv.textContent = comment.commentContent;
 
     commentBox.appendChild(topRow);

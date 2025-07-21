@@ -3,6 +3,7 @@ package com.project.toyProject.dao;
 import com.project.toyProject.domain.dto.post.PostDetailDTO;
 import com.project.toyProject.domain.dto.post.PostEditDTO;
 import com.project.toyProject.domain.dto.post.PostListDTO;
+import com.project.toyProject.domain.dto.post.PostSearchDTO;
 import com.project.toyProject.domain.vo.PostVO;
 import com.project.toyProject.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,8 @@ public class PostDAO {
         postMapper.insert(postVO);
     }
 //    게시글 목록
-    public List<PostListDTO> selectAllPost(Map<String,Object>searchMap){
-        return postMapper.selectAllPost(searchMap);
+    public List<PostListDTO> selectAllPost(PostSearchDTO postSearchDTO){
+        return postMapper.selectAllPost(postSearchDTO);
     }
 //    게시글 조회
     public PostDetailDTO selectPostById(Long id){
@@ -49,8 +50,8 @@ public class PostDAO {
         postMapper.deletePostById(id);
     }
 //    게시글 총 개수
-    public int selectAllPostCount(Map<String,Object>searchMap){
-        return postMapper.selectAllPostCount(searchMap);
+    public int selectAllPostCount(PostSearchDTO postSearchDTO){
+        return postMapper.selectAllPostCount(postSearchDTO);
     }
 }
 

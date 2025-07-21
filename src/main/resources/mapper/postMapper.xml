@@ -9,7 +9,7 @@
         VALUES
             (#{postTitle},#{postContent},#{postRegisterDate},#{postUpdateDate},#{postLikeCount},#{postReadCount},#{memberId})
     </insert>
-    <select id="selectAllPost" resultType="com.project.toyProject.domain.dto.post.PostListDTO" parameterType="map">
+    <select id="selectAllPost" resultType="com.project.toyProject.domain.dto.post.PostListDTO" parameterType="com.project.toyProject.domain.dto.post.PostSearchDTO">
         SELECT *
         FROM TBL_POST P
         JOIN TBL_MEMBER M ON P.MEMBER_ID = M.ID
@@ -71,7 +71,7 @@
         DELETE FROM TBL_POST
         WHERE ID=#{id}
     </delete>
-    <select id="selectAllPostCount" resultType="int" parameterType="map">
+    <select id="selectAllPostCount" resultType="int" parameterType="com.project.toyProject.domain.dto.post.PostSearchDTO">
         SELECT COUNT(*)
         FROM TBL_POST P
         JOIN TBL_MEMBER M ON P.MEMBER_ID = M.ID

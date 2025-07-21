@@ -34,4 +34,16 @@ public class PostLikeStatusServiceImpl implements PostLikeStatusService {
             log.info(postDAO.selectPostLikeCount(postId).toString());
         }
     }
+
+    @Override
+    public PostLikeStatusVO getPostLikeStatus(Long postId, Long memberId) {
+        PostLikeStatusVO likeStatus = postLikeStatusDAO.selectLikeStatus(postId, memberId);
+        if (likeStatus == null) {
+            // 상태가 없으면 기본값 생성
+            PostLikeStatusVO defaultStatus = new PostLikeStatusVO();
+            defaultStatus.setPostLikeStatus("noneClick");
+            return defaultStatus;
+        }
+        return likeStatus;
+    }
 }

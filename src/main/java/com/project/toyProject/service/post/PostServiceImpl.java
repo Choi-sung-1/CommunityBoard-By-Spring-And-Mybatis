@@ -3,6 +3,7 @@ package com.project.toyProject.service.post;
 import com.project.toyProject.dao.CommentDAO;
 import com.project.toyProject.dao.FileDAO;
 import com.project.toyProject.dao.PostDAO;
+import com.project.toyProject.dao.PostLikeStatusDAO;
 import com.project.toyProject.domain.dto.post.PostDetailDTO;
 import com.project.toyProject.domain.dto.post.PostEditDTO;
 import com.project.toyProject.domain.dto.post.PostListDTO;

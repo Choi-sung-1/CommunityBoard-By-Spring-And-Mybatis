@@ -3,6 +3,7 @@ package com.project.toyProject.controller;
 import com.project.toyProject.domain.dto.post.PostEditDTO;
 import com.project.toyProject.domain.dto.post.PostListDTO;
 import com.project.toyProject.domain.vo.MemberVO;
+import com.project.toyProject.domain.vo.PostLikeStatusVO;
 import com.project.toyProject.domain.vo.PostVO;
 import com.project.toyProject.service.comment.CommentServiceImpl;
 import com.project.toyProject.service.member.MemberService;
@@ -68,7 +69,11 @@ public class PostController {
 //    게시글 상세페이지 GET
     @GetMapping("/detail/{postId}")
     public String postDetail(@PathVariable("postId")Long postId,Model model, HttpSession session) {
-        model.addAttribute("loginUser",memberService.findMemberById((Long)session.getAttribute("sessionId")));
+        MemberVO member = memberService.findMemberById((Long)session.getAttribute("sessionId"));
+        String likeStatus = postLikeStatusService.getPostLikeStatus(postId,member.getId()).getPostLikeStatus();
+
+        model.addAttribute("likeStatus",likeStatus);
+        model.addAttribute("loginUser",member);
         model.addAttribute("post",postService.findPostById(postId,session));
         model.addAttribute("comments",commentService.findAll(postId));
         log.info(commentService.toString());
@@ -106,8 +111,8 @@ public class PostController {
 
         postLikeStatusService.toggleLikeStatus(postId,memberId);
         Long likeCount = postService.findPostLikeCountById(postId);
-        log.info(likeCount.toString());
-        return ResponseEntity.ok(Map.of("likeCount",likeCount));
+        PostLikeStatusVO postLikeStatusVO = postLikeStatusService.getPostLikeStatus(postId,memberId);
+        return ResponseEntity.ok(Map.of("likeCount",likeCount,"likeStatus",postLikeStatusVO.getPostLikeStatus()));
     }
 //    게시글 삭제
     @GetMapping("/delete/{postId}")

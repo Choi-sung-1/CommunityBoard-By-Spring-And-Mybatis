@@ -45,9 +45,13 @@
                 </div>
             </div>
             <div>
-                <button id="likeButton" type="button" onclick="onClickLikeButton()">
+                <div id="likeStatus" th:if="${likeStatus!=null}" th:attr="data-like-status=${likeStatus}" hidden></div>
+                <button id="likeButton"
+                        type="button"
+                        onclick="onClickLikeButton()">
                     ❤️ <span th:text="*{postLikeCount}" id="likeCount">0</span>
                 </button>
+
             </div>
             <hr class="my-4">
 
@@ -100,32 +104,41 @@
 </body>
 </html>
 <script>
-<!--    true면 클릭되어있고,false면 클릭되어있지않음.-->
-//좋아요 버튼 클릭
-    let liked = false;
-function onClickLikeButton(){
-        let likeButtonStatus = liked ? 'onClick' : 'noneClick';
+    document.addEventListener("DOMContentLoaded", function () {
+        const likeStatusElement = document.getElementById("likeStatus");
+        const likeStatus = likeStatusElement.dataset.likeStatus;
 
-        let likeCount = document.getElementById('likeCount');
-        const postId = document.getElementById('postId').dataset.postId;
-        const memberId = document.getElementById('memberId').dataset.memberId;
-        console.log(likeButtonStatus,likeCount,postId,memberId);
+        console.log("초기 좋아요 상태:", likeStatus); // 로그로 확인해보기
+        updateLikeButtonStyle(likeStatus);
+    });
 
-        // likeCount.textContent = 'likeCount';
-        fetch('/post/like',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({
-                postId: Number(postId), //value값은 string으로 들어가기 때문에 pk인 postId는 캐스팅해줘야함
-                memberId: Number(memberId),
-                likeButtonStatus:likeButtonStatus
-            })
-        }).then(response => response.json())
-                .then(data=>{
-                likeCount.textContent=data.likeCount;
-            })
-        updateLikeButtonStyle(likeButtonStatus)
-    }
+    //좋아요 버튼 클릭
+function onClickLikeButton() {
+    // 초기 liked 값 설정
+    let liked = document.getElementById('likeStatus').dataset.status === 'onClick';
+    liked = !liked; // 상태 뒤집기
+    const likeButtonStatus = liked ? 'onClick' : 'noneClick';
+    const likeCount = document.getElementById('likeCount');
+    const postId = document.getElementById('postId').dataset.postId;
+    const memberId = document.getElementById('memberId').dataset.memberId;
+
+    // 서버 요청
+    fetch('/post/like', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            postId: Number(postId),
+            memberId: Number(memberId),
+            likeButtonStatus: likeButtonStatus
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            likeCount.textContent = data.likeCount;
+            updateLikeButtonStyle(data.likeStatus);
+        });
+}
+
 //게시글 삭제 컨펌
 function deleteOnclick() {
     return confirm("정말 삭제하시겠습니까?");
@@ -199,6 +212,16 @@ function deleteComment(button) {
     });
     commentBox.remove();
 //     삭제는되는데 비동기로 삭제가안됨
+}
+// 좋아요 버튼 상태 업데이트
+function updateLikeButtonStyle(status) {
+    const likeButton = document.getElementById("likeButton");
+
+    if (status === "onClick") {
+        likeButton.classList.add("btn-danger");
+    } else {
+        likeButton.classList.remove("btn-danger");
+    }
 }
 
 </script>

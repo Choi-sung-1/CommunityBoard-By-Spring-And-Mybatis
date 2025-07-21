@@ -14,4 +14,8 @@ public class PostLikeStatusVO {
         this.memberId = memberId;
         this.postId = postId;
     }
+
+    public PostLikeStatusVO() {
+
+    }
 }

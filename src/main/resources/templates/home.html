@@ -16,12 +16,12 @@
     </div>
 
     <div>
-        <button th:onclick="|location.href='@{/member/join}'|">
+        <button th:if="${loginMember ==null}" th:onclick="|location.href='@{/member/join}'|">
             <div>📝</div>
             회원가입
         </button>
 
-        <button th:onclick="|location.href='/member/login'|">
+        <button th:if="${loginMember==null}" th:onclick="|location.href='/member/login'|">
             <div>🔐</div>
             로그인
         </button>

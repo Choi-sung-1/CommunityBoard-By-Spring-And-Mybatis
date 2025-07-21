@@ -28,9 +28,7 @@ public class MemberController {
     }
     @PostMapping("/join")
     public String join(@ModelAttribute MemberVO memberVO) {
-//        bindingresult 추가해야함, 검증도 해야함
         memberService.join(memberVO);
-
         log.info(memberVO.toString());
         return "redirect:/member/login";
     }
@@ -42,9 +40,7 @@ public class MemberController {
     @PostMapping("/login")
     public String login(@ModelAttribute MemberLoginDTO memberLoginDTO, HttpSession session) {
         log.info(memberLoginDTO.toString());
-//        bindingresult 추가해야함, 검증도 해야함
         Optional<MemberVO> loginMember = memberService.login(memberLoginDTO);
-
         if (loginMember !=null && loginMember.isPresent()) {
             session.setAttribute("sessionId", loginMember.get().getId());
             return "redirect:/";
@@ -70,8 +66,8 @@ public class MemberController {
         return "/member/profileEdit";
     }
     @PostMapping("/profile/edit/{memberId}")
-    public String editProfile(HttpSession session,@ModelAttribute MemberProfileDTO memberProfileDTO, @RequestParam("profileImage") MultipartFile pfImage) {
-        memberService.updateMemberProfile(memberProfileDTO,pfImage,(Long)session.getAttribute("sessionId"));
+    public String editProfile(@PathVariable Long memberId,@ModelAttribute MemberProfileDTO memberProfileDTO, @RequestParam("profileImage") MultipartFile pfImage) {
+        memberService.updateMemberProfile(memberProfileDTO,pfImage,memberId);
         return "redirect:/member/profile";
     }
     @GetMapping("/logout")

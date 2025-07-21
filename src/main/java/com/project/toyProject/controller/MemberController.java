@@ -38,12 +38,12 @@ public class MemberController {
         return "/member/login";
     }
     @PostMapping("/login")
-    public String login(@ModelAttribute MemberLoginDTO memberLoginDTO, HttpSession session) {
+    public String login(@ModelAttribute MemberLoginDTO memberLoginDTO, HttpSession session,@RequestParam(defaultValue = "/")String redirectURI) {
         log.info(memberLoginDTO.toString());
         Optional<MemberVO> loginMember = memberService.login(memberLoginDTO);
         if (loginMember !=null && loginMember.isPresent()) {
             session.setAttribute("sessionId", loginMember.get().getId());
-            return "redirect:/";
+            return "redirect:"+redirectURI;
         }
         return "/member/login";
     }

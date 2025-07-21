@@ -14,6 +14,15 @@
         <div>
             <div>
                 <div >
+                    <form th:action="@{/post/list}" method="get" style="display: flex; gap: 10px">
+                        <select name="type">
+                            <option value="title">제목</option>
+                            <option value="writer">작성자</option>
+                            <option value="content">내용</option>
+                        </select>
+                        <input type="text"placeholder="검색어를 입력하세요.">
+                        <button type="submit">검색</button>
+                    </form>
                     <table style="border-style: solid">
                         <thead>
                             <tr>

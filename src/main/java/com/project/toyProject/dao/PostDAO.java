@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Repository
@@ -20,8 +21,8 @@ public class PostDAO {
         postMapper.insert(postVO);
     }
 //    게시글 목록
-    public List<PostListDTO> selectAllPost(int limit,int offset){
-        return postMapper.selectAllPost(limit,offset);
+    public List<PostListDTO> selectAllPost(Map<String,Object>searchMap){
+        return postMapper.selectAllPost(searchMap);
     }
 //    게시글 조회
     public PostDetailDTO selectPostById(Long id){
@@ -48,8 +49,8 @@ public class PostDAO {
         postMapper.deletePostById(id);
     }
 //    게시글 총 개수
-    public int selectAllPostCount(){
-        return postMapper.selectAllPostCount();
+    public int selectAllPostCount(Map<String,Object>searchMap){
+        return postMapper.selectAllPostCount(searchMap);
     }
 }
 

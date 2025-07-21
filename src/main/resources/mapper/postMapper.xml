@@ -9,11 +9,29 @@
         VALUES
             (#{postTitle},#{postContent},#{postRegisterDate},#{postUpdateDate},#{postLikeCount},#{postReadCount},#{memberId})
     </insert>
-    <select id="selectAllPost">
-        SELECT P.ID,POST_TITLE,MEMBER_LOGIN_ID,POST_REGISTER_DATE,POST_READ_COUNT,POST_UPDATE_DATE FROM TBL_POST P
-        INNER JOIN TBL_MEMBER M ON P.MEMBER_ID=M.ID
-        LIMIT #{limit} OFFSET #{offset}
-    </select>
+    <select id="selectAllPost" resultType="com.project.toyProject.domain.dto.post.PostListDTO" parameterType="map">
+        SELECT *
+        FROM TBL_POST P
+        JOIN TBL_MEMBER M ON P.MEMBER_ID = M.ID
+        <where>
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="type == 'title'">
+                        AND P.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="type == 'writer'">
+                        AND M.MEMBER_LOGIN_ID LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="type == 'content'">
+                        AND P.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
+        ORDER BY P.ID
+        LIMIT #{startRow}, #{pageSize}
+        </select>
+
     <select id="selectPostById" >
         SELECT P.ID, P.POST_TITLE, P.POST_CONTENT, P.POST_LIKE_COUNT, M.MEMBER_LOGIN_ID
         FROM TBL_POST P
@@ -53,7 +71,25 @@
         DELETE FROM TBL_POST
         WHERE ID=#{id}
     </delete>
-    <select id="selectAllPostCount">
-        SELECT COUNT(*) FROM TBL_POST
+    <select id="selectAllPostCount" resultType="int" parameterType="map">
+        SELECT COUNT(*)
+        FROM TBL_POST P
+        JOIN TBL_MEMBER M ON P.MEMBER_ID = M.ID
+        <where>
+            <if test="type != null and keyword != null and keyword != ''">
+                <choose>
+                    <when test="type == 'title'">
+                        P.POST_TITLE LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="type == 'writer'">
+                        M.MEMBER_LOGIN_ID LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="type == 'content'">
+                        P.POST_CONTENT LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                </choose>
+            </if>
+        </where>
     </select>
+
 </mapper>

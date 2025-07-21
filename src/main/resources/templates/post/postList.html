@@ -20,10 +20,13 @@
                             <option value="writer">작성자</option>
                             <option value="content">내용</option>
                         </select>
-                        <input type="text"placeholder="검색어를 입력하세요.">
+                        <input type="text" name="keyword" placeholder="검색어를 입력하세요.">
                         <button type="submit">검색</button>
                     </form>
-                    <table style="border-style: solid">
+                    <div th:if="${#lists.isEmpty(posts)}">
+                        <p>게시글이 없습니다.</p>
+                    </div>
+                    <table style="border-style: solid" th:unless="${#lists.isEmpty(posts)}">
                         <thead>
                             <tr>
                                 <th>번호</th>
@@ -49,17 +52,20 @@
 <!--                페이징 처리-->
                 <nav>
                     <div>
-                        <ul class="pagination">
-                            <li th:if="${currentPage>1}">
-                                <a th:href="@{/post/list(page=${currentPage -1})}">« 이전</a>
+                        <ul class="pagination" th:if="${totalPages>0}">
+                            <li th:if="${currentPage > 1}">
+                                <a th:href="@{/post/list(page=${currentPage - 1}, type=${type}, keyword=${keyword})}">« 이전</a>
                             </li>
-                            <li th:each="i : ${#numbers.sequence(startPage,endPage)}" class="page-item">
-                                <a th:href="@{/post/list(page=${i})}"
-                                   th:text="|${i}|" class="page-link m-1"
+
+                            <li th:each="i : ${#numbers.sequence(startPage, endPage)}" class="page-item">
+                                <a th:href="@{/post/list(page=${i}, type=${type}, keyword=${keyword})}"
+                                   th:text="|${i}|"
+                                   class="page-link m-1"
                                    th:classappend="${i == currentPage ? 'border-danger' : ''}">1</a>
                             </li>
-                            <li th:if="${currentPage<totalPages}">
-                                <a th:href="@{/post/list(page=${currentPage+1})}">다음 »</a>
+
+                            <li th:if="${currentPage < totalPages}">
+                                <a th:href="@{/post/list(page=${currentPage + 1}, type=${type}, keyword=${keyword})}">다음 »</a>
                             </li>
                         </ul>
                     </div>

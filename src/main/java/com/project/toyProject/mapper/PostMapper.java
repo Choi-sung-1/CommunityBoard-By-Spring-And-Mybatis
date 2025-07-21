@@ -8,13 +8,14 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface PostMapper {
 //    게시글 작성
     public void insert(PostVO postVO);
 //    게시글 목록
-    public List<PostListDTO> selectAllPost(@Param("limit")int limit, @Param("offset")int offset);
+    public List<PostListDTO> selectAllPost(Map<String,Object>searchMap);
 //    게시글 조회
     public PostDetailDTO selectPostById(Long id);
 //    조회수 증가
@@ -28,5 +29,5 @@ public interface PostMapper {
 //    게시글 삭제
     public void deletePostById(Long id);
 //    게시글 전체 개수
-    public int selectAllPostCount();
+    public int selectAllPostCount(Map<String,Object>searchMap);
 }

@@ -8,12 +8,13 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PostService {
 //    게시글 작성
     public void writePost(PostVO postVO, MultipartFile[] files,Long memberId);
 //    게시글 목록
-    public List<PostListDTO> findAllPosts(int page);
+public List<PostListDTO> findAllPosts(Map<String,Object>searchMap);
 //    게시글 조회
     public PostDetailDTO findPostById(Long id, HttpSession session);
 //    게시글 수정
@@ -25,5 +26,5 @@ public interface PostService {
 //    게시글 삭제
     public void deletePost(Long postId);
 //    게시글 총 개수
-    public int selectAllPostCount();
+    public int selectAllPostCount(Map<String,Object>searchMap);
 }

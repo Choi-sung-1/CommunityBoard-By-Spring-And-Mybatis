@@ -3,7 +3,6 @@ package com.project.toyProject.service.post;
 import com.project.toyProject.dao.CommentDAO;
 import com.project.toyProject.dao.FileDAO;
 import com.project.toyProject.dao.PostDAO;
-import com.project.toyProject.dao.PostLikeStatusDAO;
 import com.project.toyProject.domain.dto.post.PostDetailDTO;
 import com.project.toyProject.domain.dto.post.PostEditDTO;
 import com.project.toyProject.domain.dto.post.PostListDTO;
@@ -13,16 +12,14 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
-
-import static com.project.toyProject.controller.PostController.LIMIT;
 
 @Service
 @RequiredArgsConstructor
@@ -49,9 +46,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostListDTO> findAllPosts(int page) {
-        int offset = (page - 1) * LIMIT;
-        return postDAO.selectAllPost(LIMIT, offset);
+    public List<PostListDTO> findAllPosts(Map<String, Object> searchMap) {
+        return postDAO.selectAllPost(searchMap);
     }
 
     @Override
@@ -94,8 +90,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public int selectAllPostCount() {
-        return postDAO.selectAllPostCount();
+    public int selectAllPostCount(Map<String, Object> searchMap) {
+        return postDAO.selectAllPostCount(searchMap);
     }
 
 

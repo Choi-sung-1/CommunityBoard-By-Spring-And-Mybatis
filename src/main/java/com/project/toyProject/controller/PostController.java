@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,15 +31,29 @@ public class PostController {
     private final PostServiceImpl postService;
     private final PostLikeStatusServiceImpl postLikeStatusService;
     private final CommentServiceImpl commentService;
-    public final static int LIMIT = 10;
+    public final static int PAGE_SIZE = 5;
 
     //    게시글 목록
     @GetMapping("/list")
-    public String postList(@RequestParam(defaultValue="1")int page, Model model,HttpSession session) {
-        List<PostListDTO> posts = postService.findAllPosts(page);
+    public String postList(@RequestParam(defaultValue="1")int page,
+                           @RequestParam(required = false) String type,
+                           @RequestParam(required = false) String keyword,
+                           Model model,HttpSession session) {
+//      게시글 검색
+        Map<String,Object> searchMap = new HashMap<>();
+        searchMap.put("type",type);
+        searchMap.put("keyword",keyword);
+        searchMap.put("page",page);
+        searchMap.put("startRow",(page-1)*PAGE_SIZE);
+        searchMap.put("pageSize",PAGE_SIZE);
+
+//        서비스로직 실행
+        List<PostListDTO> posts = postService.findAllPosts(searchMap);
         MemberVO loginMember = memberService.findMemberById((Long)session.getAttribute("sessionId"));
-        int totalCount = postService.selectAllPostCount();
-        int totalPages = (int)Math.ceil((double)totalCount /LIMIT);
+
+//        페이징 처리
+        int totalCount = postService.selectAllPostCount(searchMap);
+        int totalPages = (totalCount==0)? 1:(int)Math.ceil((double) totalCount/PAGE_SIZE);
         int blockSize = 5;
         int startPage = Math.max(1,page-2);
         int endPage = Math.min(totalPages,startPage+blockSize-1);
@@ -49,6 +64,8 @@ public class PostController {
         model.addAttribute("endPage",endPage);
         model.addAttribute("loginMember",loginMember);
         model.addAttribute("posts",posts);
+        model.addAttribute("type",type);
+        model.addAttribute("keyword",keyword);
         return "/post/postList";
     }
 

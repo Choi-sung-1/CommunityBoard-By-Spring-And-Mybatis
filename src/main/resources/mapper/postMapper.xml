@@ -28,7 +28,17 @@
                 </choose>
             </if>
         </where>
-        ORDER BY P.ID
+        <choose>
+            <when test="sort=='readCount'">
+                ORDER BY P.POST_READ_COUNT DESC
+            </when>
+            <when test="sort=='date'">
+                ORDER BY P.POST_REGISTER_DATE DESC
+            </when>
+            <otherwise>
+                ORDER BY P.ID DESC
+            </otherwise>
+        </choose>
         LIMIT #{startRow}, #{pageSize}
         </select>
 

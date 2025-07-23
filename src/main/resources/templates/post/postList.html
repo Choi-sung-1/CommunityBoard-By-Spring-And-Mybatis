@@ -8,22 +8,32 @@
 </head>
 <body>
 <div>
-    <h2><a th:href="@{/post/list}" style="text-decoration: none">📌 게시글 목록</a></h2>
+    <h2>📌 게시글 목록</h2>
     <div>
         <!-- 게시글 목록 -->
         <div>
             <div>
                 <div >
                     <form th:action="@{/post/list}" method="get" style="display: flex; gap: 10px">
-                        <select name="type">
-                            <option value="title">제목</option>
-                            <option value="writer">작성자</option>
-                            <option value="content">내용</option>
-                        </select>
-                        <input type="text" name="keyword" placeholder="검색어를 입력하세요.">
+                        <label>
+                            <select name="type">
+                                <option value="title">제목</option>
+                                <option value="writer">작성자</option>
+                                <option value="content">내용</option>
+                            </select>
+                        </label>
+                        <label>
+                            <input type="text" name="keyword" placeholder="검색어를 입력하세요.">
+                        </label>
                         <button type="submit">검색</button>
                     </form>
                 </div>
+                    <div>
+                        <ul>
+                            <li><a th:href="@{/post/list(sort='readCount',type=${type}, keyword=${keyword})}">인기순</a></li>
+                            <li><a th:href="@{/post/list(sort='date',type=${type}, keyword=${keyword})}">최신순</a></li>
+                        </ul>
+                    </div>
                     <div th:if="${#lists.isEmpty(posts)}">
                         <p>게시글이 없습니다.</p>
                     </div>
@@ -35,8 +45,8 @@
                                 <th>제목</th>
                                 <th>작성자</th>
                                 <th>조회수</th>
-                                <th>작성일</th>
-                                <th>최근수정일</th>
+<!--                                <th>작성일</th>-->
+                                <th>최근 수정일</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,7 +55,7 @@
                                 <td><a th:text="${post.postTitle}" th:href="@{/post/detail/{postId}(postId=${post.id})}"/></td>
                                 <td th:text="${post.memberLoginId}">작성자</td>
                                 <td th:text="${post.postReadCount}">10</td>
-                                <td th:text="${post.formattedPostRegisterDate}">2025-05-01</td>
+<!--                                <td th:text="${post.formattedPostRegisterDate}">2025-05-01</td>-->
                                 <td th:text="${post.formattedPostUpdateDate}">2025-05-1 8</td>
                             </tr>
                         </tbody>
@@ -56,18 +66,18 @@
                     <div>
                         <ul class="pagination" th:if="${totalPages>0}">
                             <li th:if="${currentPage > 1}">
-                                <a th:href="@{/post/list(page=${currentPage - 1}, type=${type}, keyword=${keyword})}">« 이전</a>
+                                <a th:href="@{/post/list(page=${currentPage - 1},sort=${sort}, type=${type}, keyword=${keyword})}">« 이전</a>
                             </li>
 
                             <li th:each="i : ${#numbers.sequence(startPage, endPage)}" class="page-item">
-                                <a th:href="@{/post/list(page=${i}, type=${type}, keyword=${keyword})}"
+                                <a th:href="@{/post/list(page=${i},sort=${sort}, type=${type}, keyword=${keyword})}"
                                    th:text="|${i}|"
                                    class="page-link m-1"
                                    th:classappend="${i == currentPage ? 'border-danger' : ''}">1</a>
                             </li>
 
                             <li th:if="${currentPage < totalPages}">
-                                <a th:href="@{/post/list(page=${currentPage + 1}, type=${type}, keyword=${keyword})}">다음 »</a>
+                                <a th:href="@{/post/list(page=${currentPage + 1}, sort=${sort},type=${type}, keyword=${keyword})}">다음 »</a>
                             </li>
                         </ul>
                     </div>
@@ -81,14 +91,16 @@
                 <div>
                     <strong th:text="|로그인 사용자:${loginMember.memberLoginId}|">로그인 사용자</strong>
                 </div>
-                <a th:href="@{/member/profile}">마이 페이지</a>
+                <a th:href="@{/member/profile}">👥마이 페이지</a>
                 <a th:href="@{/post/write}">➕ 새 글 작성</a>
+                <a th:href="@{/}">🏠홈 화면</a>
                 <a th:href="@{/member/logout}">🚪 로그아웃</a>
             </div>
             <div>
                 <div th:if="${loginMember==null}">
                     <p>⚠️ 로그인 후 이용해주세요.</p>
                     <a th:href="@{/member/login}">로그인</a>
+                    <a th:href="@{/}">🏠홈 화면</a>
                 </div>
             </div>
         </div>

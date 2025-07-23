@@ -38,12 +38,14 @@ public class PostController {
     public String postList(@RequestParam(defaultValue="1")int page,
                            @RequestParam(required = false) String type,
                            @RequestParam(required = false) String keyword,
+                           @RequestParam(required = false) String sort,
                            Model model,HttpSession session) {
 //      게시글 검색
         PostSearchDTO postSearchDTO = new PostSearchDTO();
         postSearchDTO.setType(type);
         postSearchDTO.setKeyword(keyword);
         postSearchDTO.setPage(page);
+        postSearchDTO.setSort(sort);
         postSearchDTO.setStartRow((page-1)*PAGE_SIZE);
         postSearchDTO.setPageSize(PAGE_SIZE);
 
@@ -66,6 +68,7 @@ public class PostController {
         model.addAttribute("posts",posts);
         model.addAttribute("type",type);
         model.addAttribute("keyword",keyword);
+        model.addAttribute("sort",sort);
         return "/post/postList";
     }
 

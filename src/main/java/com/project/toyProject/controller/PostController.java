@@ -83,6 +83,7 @@ public class PostController {
 //    게시글 작성 POST
     @PostMapping("/write")
     public String postWrite(@ModelAttribute PostVO postVO, @RequestParam("imageFiles")MultipartFile[] files, HttpSession session) {
+        log.info(postVO.toString());
         postService.writePost(postVO,files,(Long)session.getAttribute("sessionId"));
         return "redirect:/post/list";
     }

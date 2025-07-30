@@ -11,6 +11,7 @@ public class PostDetailDTO {
     private String postTitle;
     private String postContent;
     private Long postLikeCount;
+    private String postRegisterLocation;
 
     private String fileOriginalName;
     private String memberLoginId;

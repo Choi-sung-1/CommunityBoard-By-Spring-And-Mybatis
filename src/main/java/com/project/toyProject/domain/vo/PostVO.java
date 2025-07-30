@@ -13,6 +13,7 @@ public class PostVO {
     private LocalDateTime postUpdateDate;
     private Long postLikeCount;
     private Long postReadCount;
+    private String postRegisterLocation;
     private Long memberId;
 
 }

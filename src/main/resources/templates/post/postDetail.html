@@ -27,14 +27,12 @@
             <div id="memberId" th:if="${loginUser}!=null" th:attr="data-member-id=${loginUser.id}" hidden="hidden"></div>
             <div>
                 <label for="postTitle">제목</label>
-                <input type="text" id="postTitle"
-                       th:field="*{postTitle}" readonly>
+                <input type="text" id="postTitle" th:field="*{postTitle}" readonly>
             </div>
 
             <div th:if="!${post.fileList.isEmpty()}">
                 <label for="viewCard">이미지</label>
                 <div th:each="file : ${post.fileList}">
-                    <div th:text="@{|/postImages/${file.fileOriginalName}|}"></div>
                     <img th:src="@{|/postImages/${file.fileOriginalName}|}" id="viewCard" style="max-width: 200px;" />
                 </div>
             </div>
@@ -43,9 +41,9 @@
                 <div>
                     <textarea th:text="*{postContent}" id="postContent" rows="6" readonly></textarea>
                 </div>
-                <label>📍장소</label>
-                <div>
-                    <input type="text" readonly>
+                <div th:if="*{!postRegisterLocation.isEmpty()}">
+                    <label for="postRegisterLocation">📍장소</label>
+                    <input type="text" id="postRegisterLocation" readonly th:field="*{postRegisterLocation}" class="form-control w-100">
                 </div>
             </div>
             <div>

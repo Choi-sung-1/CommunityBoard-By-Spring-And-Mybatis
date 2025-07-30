@@ -44,7 +44,8 @@
         <!-- 위치 표시 -->
         <div id="locDiv" class="form-group mb-3">
             <label class="form-label">📍장소</label>
-            <div id="currentAddress" class="mb-2"></div>
+            <div id="currentAddress" class="mb-2" th:field="*{postRegisterLocation}"></div>
+            <input type="hidden" th:field="*{postRegisterLocation}" id="postRegisterLocation">
             <button type="button" class="btn btn-outline-primary btn-sm" onclick="showMap()">위치선택</button>
         </div>
 
@@ -123,6 +124,7 @@
 
     function selectLocation() {
         currentAdd.innerText = selectedAddress;
+        document.getElementById('postRegisterLocation').value = selectedAddress; // 이 줄 추가
         document.getElementById('container').hidden = true;
         document.getElementById('locDiv').hidden = false;
     }

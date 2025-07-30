@@ -5,9 +5,9 @@
             parameterType="com.project.toyProject.domain.vo.PostVO"
             useGeneratedKeys="true" keyProperty="id">
         INSERT INTO TBL_POST
-            (POST_TITLE,POST_CONTENT,POST_REGISTER_DATE,POST_UPDATE_DATE,POST_LIKE_COUNT,POST_READ_COUNT,MEMBER_ID)
+            (POST_TITLE,POST_CONTENT,POST_REGISTER_DATE,POST_UPDATE_DATE,POST_LIKE_COUNT,POST_READ_COUNT,POST_REGISTER_LOCATION,MEMBER_ID)
         VALUES
-            (#{postTitle},#{postContent},#{postRegisterDate},#{postUpdateDate},#{postLikeCount},#{postReadCount},#{memberId})
+            (#{postTitle},#{postContent},#{postRegisterDate},#{postUpdateDate},#{postLikeCount},#{postReadCount},#{postRegisterLocation},#{memberId})
     </insert>
     <select id="selectAllPost" resultType="com.project.toyProject.domain.dto.post.PostListDTO" parameterType="com.project.toyProject.domain.dto.post.PostSearchDTO">
         SELECT *
@@ -43,7 +43,7 @@
         </select>
 
     <select id="selectPostById" >
-        SELECT P.ID, P.POST_TITLE, P.POST_CONTENT, P.POST_LIKE_COUNT, M.MEMBER_LOGIN_ID
+        SELECT P.ID, P.POST_TITLE, P.POST_CONTENT, P.POST_LIKE_COUNT, M.MEMBER_LOGIN_ID,p.POST_REGISTER_LOCATION
         FROM TBL_POST P
                  INNER JOIN TBL_MEMBER M ON P.MEMBER_ID = M.ID
         WHERE P.ID = #{id}

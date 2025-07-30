@@ -92,7 +92,6 @@ public class PostController {
     public String postDetail(@PathVariable("postId")Long postId,Model model, HttpSession session) {
         MemberVO member = memberService.findMemberById((Long)session.getAttribute("sessionId"));
         String likeStatus = postLikeStatusService.getPostLikeStatus(postId,member.getId()).getPostLikeStatus();
-
         model.addAttribute("likeStatus",likeStatus);
         model.addAttribute("loginUser",member);
         model.addAttribute("post",postService.findPostById(postId,session));

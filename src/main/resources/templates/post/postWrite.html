@@ -9,59 +9,145 @@
 <div>
     <h2>📝 게시글 작성</h2>
 
-    <h4 th:if="${loginMember == null}" >로그인 후 이용해주세요.</h4>
+    <h4 th:if="${loginMember == null}">로그인 후 이용해주세요.</h4>
     <h4 th:if="${loginMember != null}" th:text="|로그인 사용자 : ${loginMember.memberLoginId}|">로그인 사용자</h4>
+
     <form id="postForm" name="postForm" method="post" th:object="${postVO}" enctype="multipart/form-data">
         <!-- 제목 -->
-        <div>
-            <label for="postTitle">제목</label>
+        <div class="form-group mb-3">
+            <label for="postTitle" class="form-label">제목</label>
             <input th:field="*{postTitle}" type="text" id="postTitle" class="form-control" placeholder="제목을 입력해주세요.">
         </div>
+
         <!-- 이미지 업로드 -->
-        <div >
-            <label for="imageInput">이미지 첨부</label>
-            <input type="file" id="imageInput" name="imageFiles" accept="image/*" multiple onchange="previewImages(event)">
-            <div id="previewCard"></div>
-
+        <div class="form-group mb-3">
+            <label for="imageInput" class="form-label">이미지 첨부</label>
+            <input type="file" id="imageInput" name="imageFiles" accept="image/*" multiple class="form-control" onchange="previewImages(event)">
+            <div id="previewCard" class="mt-2"></div>
         </div>
+
         <!-- 내용 -->
-        <div class="form-group">
-            <label for="postContent">내용</label>
-            <div>
-            <textarea id="postContent" rows="6" th:field="*{postContent}"
-                      placeholder="내용을 2글자 이상 입력해주세요."></textarea>
-            </div>
+        <div class="form-group mb-3">
+            <label for="postContent" class="form-label">내용</label>
+            <textarea id="postContent" rows="6" th:field="*{postContent}" class="form-control" placeholder="내용을 2글자 이상 입력해주세요."></textarea>
+        </div>
 
+        <!-- 위치 선택 -->
+        <div id="container" class="mb-3" hidden>
+            <label class="form-label">위치 선택</label>
+            <div id="map" style="width: 100%; height: 250px;" class="mb-2"></div>
+            <div id="result" class="mb-2">지도 클릭 시 정보 표시</div>
+            <button type="button" class="btn btn-sm btn-primary" onclick="selectLocation()">선택</button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="cancelLocation()">취소</button>
         </div>
-        <hr class="my-4">
+
+        <!-- 위치 표시 -->
+        <div id="locDiv" class="form-group mb-3">
+            <label class="form-label">📍장소</label>
+            <div id="currentAddress" class="mb-2"></div>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="showMap()">위치선택</button>
+        </div>
+
         <!-- 버튼 영역 -->
-        <div>
-            <div>
-                <button type="submit" id="submitButton">작성하기</button>
-            </div>
-            <div>
-                <a href="#" th:href="@{/post/list}">목록으로</a>
-            </div>
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-success">작성하기</button>
+            <a th:href="@{/post/list}" class="btn btn-secondary">목록으로</a>
         </div>
+
     </form>
 </div>
-    <script>
-        function previewImages(event) {
+
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1553256d332dc51b9fb4eb124bdfb16d&libraries=services"></script>
+<script>
+    let map;
+    let marker = null;
+    const geocoder = new kakao.maps.services.Geocoder();
+    const currentAdd = document.getElementById('currentAddress');
+    let selectedAddress = '';
+
+    function showMap() {
+        document.getElementById('container').hidden = false;
+        document.getElementById('locDiv').hidden = true;
+
+        const mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667),
+            level: 3
+        };
+
+        map = new kakao.maps.Map(document.getElementById('map'), mapOption);
+        map.addControl(new kakao.maps.MapTypeControl(), kakao.maps.ControlPosition.TOPRIGHT);
+        map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT);
+
+        kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+            onMarker(mouseEvent.latLng);
+        });
+
+        getCurrentLocation();
+    }
+
+    function getCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const userLatLng = new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                map.setCenter(userLatLng);
+                onMarker(userLatLng);
+            }, function(error) {
+                alert('위치 정보를 가져올 수 없습니다.');
+                console.error(error);
+            });
+        } else {
+            alert('브라우저가 위치 정보를 지원하지 않습니다.');
+        }
+    }
+
+    function onMarker(coords) {
+        if (marker) marker.setMap(null);
+        marker = new kakao.maps.Marker({ position: coords });
+        marker.setMap(map);
+        map.setCenter(coords);
+        showAddress(coords);
+    }
+
+    function showAddress(coords) {
+        geocoder.coord2Address(coords.getLng(), coords.getLat(), function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                const roadAddress = result[0].road_address;
+                const jibunAddress = result[0].address;
+                selectedAddress = roadAddress ? '도로명주소 : ' + roadAddress.address_name :
+                    jibunAddress ? '지번주소 : ' + jibunAddress.address_name :
+                        '주소 정보를 찾을 수 없습니다.';
+                document.getElementById('result').innerText = selectedAddress;
+            }
+        });
+    }
+
+    function selectLocation() {
+        currentAdd.innerText = selectedAddress;
+        document.getElementById('container').hidden = true;
+        document.getElementById('locDiv').hidden = false;
+    }
+
+    function cancelLocation() {
+        currentAdd.innerText = '';
+        document.getElementById('container').hidden = true;
+        document.getElementById('locDiv').hidden = false;
+    }
+    function previewImages(event) {
         const files = event.target.files;
         const previewCard = document.getElementById("previewCard");
         previewCard.innerHTML = ""; // 이전 미리보기 초기화
 
         Array.from(files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-        const img = document.createElement("img");
-        img.src = e.target.result;
-        img.className = "img-fluid rounded m-1";
-        img.style.maxWidth = "200px";
-        previewCard.appendChild(img);
-    };
-        reader.readAsDataURL(file);
-    });
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.className = "img-fluid rounded m-1";
+                img.style.maxWidth = "200px";
+                previewCard.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
     }
 </script>
 </body>

@@ -43,6 +43,10 @@
                 <div>
                     <textarea th:text="*{postContent}" id="postContent" rows="6" readonly></textarea>
                 </div>
+                <label>📍장소</label>
+                <div>
+                    <input type="text" readonly>
+                </div>
             </div>
             <div>
                 <div id="likeStatus" th:if="${likeStatus!=null}" th:attr="data-like-status=${likeStatus}" hidden></div>

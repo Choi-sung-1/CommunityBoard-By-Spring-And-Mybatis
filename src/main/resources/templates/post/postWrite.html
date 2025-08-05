@@ -4,6 +4,22 @@
     <meta charset="utf-8">
     <title>게시글 작성</title>
     <link th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .field-error {
+            color: #dc3545;
+            font-weight: 600;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+        .field-error::before {
+            content: "⚠️";
+            font-size: 1rem;
+        }
+    </style>
 </head>
 <body>
 <div>
@@ -17,6 +33,7 @@
         <div class="form-group mb-3">
             <label for="postTitle" class="form-label">제목</label>
             <input th:field="*{postTitle}" type="text" id="postTitle" class="form-control" placeholder="제목을 입력해주세요.">
+            <div class="field-error" th:errors="*{postTitle}">postTitle Error</div>
         </div>
 
         <!-- 이미지 업로드 -->
@@ -30,6 +47,8 @@
         <div class="form-group mb-3">
             <label for="postContent" class="form-label">내용</label>
             <textarea id="postContent" rows="6" th:field="*{postContent}" class="form-control" placeholder="내용을 2글자 이상 입력해주세요."></textarea>
+            <div class="field-error" th:errors="*{postContent}">postContent Error</div>
+
         </div>
 
         <!-- 위치 선택 -->

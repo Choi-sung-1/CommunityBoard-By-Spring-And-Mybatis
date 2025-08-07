@@ -47,7 +47,7 @@ public class MemberController {
         return "/member/login";
     }
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute("memberLoginDTO") MemberLoginDTO memberLoginDTO,BindingResult bindingResult, HttpSession session,@RequestParam(defaultValue = "/")String redirectURI) {
+    public String login(@Validated @ModelAttribute("memberLoginDTO") MemberLoginDTO memberLoginDTO,BindingResult bindingResult, HttpSession session,@RequestParam(defaultValue = "/post/list")String redirectURI) {
 
         memberLoginValidator.validate(memberLoginDTO, bindingResult);
         if (bindingResult.hasErrors()){

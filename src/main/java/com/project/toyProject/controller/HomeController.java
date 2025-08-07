@@ -23,7 +23,6 @@ public class HomeController {
         if (sessionId != null) {
             MemberVO loginMember = memberService.findMemberById(sessionId);
             model.addAttribute("loginMember",loginMember);
-//            성공시 포스트쪽으로 수정
             return "home";
         }
         return "home";

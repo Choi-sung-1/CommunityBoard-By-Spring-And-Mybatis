@@ -88,9 +88,10 @@ public class PostController {
     }
 //    게시글 작성 POST
     @PostMapping("/write")
-    public String postWrite(@Validated @ModelAttribute PostVO postVO, BindingResult bindingResult, @RequestParam("imageFiles")MultipartFile[] files, HttpSession session) {
+    public String postWrite(@Validated @ModelAttribute PostVO postVO, BindingResult bindingResult, @RequestParam("imageFiles")MultipartFile[] files,Model model, HttpSession session) {
         postEditAndWriteValidator.validate(postVO, bindingResult);
         if (bindingResult.hasErrors()) {
+            model.addAttribute("loginMember",memberService.findMemberById((Long) session.getAttribute("sessionId")));
             return "/post/postWrite";
         }
         postService.writePost(postVO,files,(Long)session.getAttribute("sessionId"));

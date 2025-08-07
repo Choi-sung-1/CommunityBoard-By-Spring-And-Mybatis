@@ -5,117 +5,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>마이페이지</title>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
-
     <style>
-        .field-error {
-        color: #dc3545;
-        font-size: 0.875rem;
-        margin-top: 4px;
-        }
-
         body {
             background-color: #f8f9fa;
         }
-        .profile-card {
-            max-width: 600px;
+
+        .profile-container {
+            max-width: 720px;
             margin: 40px auto;
-            border-radius: 16px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            background-color: #fff;
-            padding: 24px;
         }
-        .profile-header {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 24px;
-            border-bottom: 2px solid #dee2e6;
-            padding-bottom: 12px;
-        }
-        .form-group {
-            margin-bottom: 16px;
-        }
-        .form-label {
-            font-weight: 500;
-        }
+
         .img-preview {
-            max-width: 150px;
-            border-radius: 12px;
+            max-width: 160px;
+            border-radius: 0.75rem;
+            object-fit: cover;
+        }
+
+        .field-error {
+            color: #dc3545;
+            font-size: 0.875rem;
+        }
+
+        .form-floating > .form-control.is-invalid ~ label {
+            color: #dc3545;
+        }
+
+        .btn-group-custom .btn {
+            width: 48%;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="profile-card">
-        <div class="profile-header">
+
+<div class="container profile-container">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white fs-5 fw-semibold">
             👥 마이페이지
         </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data"
+                  th:action="@{/member/profile/edit/{memberId}(memberId=${memberId})}"
+                  th:object="${memberProfile}">
 
-        <form method="post" enctype="multipart/form-data"
-              th:action="@{/member/profile/edit/{memberId}(memberId=${memberId})}"
-              th:object="${memberProfile}">
-
-            <!-- 프로필 이미지 -->
-            <div class="form-group text-center mb-4">
-                <label for="profileImage" class="form-label d-block">프로필 이미지</label>
-                <img th:src="${filePath}" src="첨부 이미지" alt="프로필 이미지"
-                     id="profileImage" class="img-preview mb-2" />
-                <input class="form-control" type="file" name="profileImage" id="pfImage" accept="image/*" onchange="previewImage(event)" />
-                <div id="previewCard" class="mt-3">
-                    <img id="preview" src="" alt="미리보기 이미지" class="img-preview d-block mx-auto" />
+                <!-- 프로필 이미지 -->
+                <div class="mb-4 text-center">
+                    <label for="pfImage" class="form-label fw-semibold">프로필 이미지</label>
+                    <div>
+                        <img th:src="${filePath}" src="첨부 이미지" alt="프로필 이미지"
+                             id="profileImage" class="img-preview mb-2" />
+                    </div>
+                    <input class="form-control" type="file" name="profileImage" id="pfImage" accept="image/*" onchange="previewImage(event)" />
+                    <div class="mt-3" id="previewCard" style="display:none;">
+                        <img id="preview" src="" alt="미리보기 이미지" class="img-preview d-block mx-auto" />
+                    </div>
                 </div>
-            </div>
 
-            <!-- 한줄 소개 -->
-            <div class="form-group">
-                <label for="profileOneLineBio" class="form-label">한줄 소개</label>
-                <input type="text" id="profileOneLineBio" name="profileOneLineBio"
-                       th:value="*{profileOneLineBio}" class="form-control" />
-            </div>
+                <!-- 한줄 소개 -->
+                <div class="form-floating mb-3">
+                    <input type="text" id="profileOneLineBio" name="profileOneLineBio"
+                           th:value="*{profileOneLineBio}" class="form-control" placeholder="한줄 소개" />
+                    <label for="profileOneLineBio">한줄 소개</label>
+                </div>
 
-            <!-- 이름 -->
-            <div class="form-group">
-                <label class="form-label">이름</label>
-                <input type="text" th:field="*{memberName}" class="form-control" id="memberName"/>
-                <div class="field-error" id="nameError"></div>
-            </div>
+                <!-- 이름 -->
+                <div class="form-floating mb-3">
+                    <input type="text" th:field="*{memberName}" class="form-control" id="memberName" placeholder="이름"/>
+                    <label for="memberName">이름</label>
+                    <div class="field-error" id="nameError"></div>
+                </div>
 
-            <!-- 아이디 -->
-            <div class="form-group">
-                <label class="form-label">아이디</label>
-                <input type="text" th:field="*{memberLoginId}" class="form-control" readonly />
-            </div>
+                <!-- 아이디 -->
+                <div class="form-floating mb-3">
+                    <input type="text" th:field="*{memberLoginId}" class="form-control" readonly placeholder="아이디"/>
+                    <label>아이디</label>
+                </div>
 
-            <!-- 이메일 -->
-            <div class="form-group">
-                <label class="form-label">이메일</label>
-                <input type="email" id="memberEmail" th:field="*{memberEmail}" class="form-control" />
-                <div class="field-error" id="emailError"></div>
-            </div>
+                <!-- 이메일 -->
+                <div class="form-floating mb-3">
+                    <input type="email" id="memberEmail" th:field="*{memberEmail}" class="form-control" placeholder="이메일" />
+                    <label for="memberEmail">이메일</label>
+                    <div class="field-error" id="emailError"></div>
+                </div>
 
-            <!-- 생년월일 -->
-            <div class="form-group">
-                <label class="form-label">생년월일</label>
-                <input type="text" th:value="*{memberBirth}" class="form-control" readonly />
-            </div>
+                <!-- 생년월일 -->
+                <div class="form-floating mb-3">
+                    <input type="text" th:value="*{memberBirth}" class="form-control" readonly placeholder="생년월일"/>
+                    <label>생년월일</label>
+                </div>
 
-            <!-- 전화번호 -->
-            <div class="form-group">
-                <label class="form-label">전화번호</label>
-                <input type="text" id="memberPhone" th:field="*{memberPhone}" class="form-control" />
-                <div class="field-error" id="phoneError"></div>
-            </div>
+                <!-- 전화번호 -->
+                <div class="form-floating mb-3">
+                    <input type="text" id="memberPhone" th:field="*{memberPhone}" class="form-control" placeholder="010-1234-5678" />
+                    <label for="memberPhone">전화번호</label>
+                    <div class="field-error" id="phoneError"></div>
+                </div>
 
-            <!-- 버튼 -->
-            <div class="d-flex justify-content-between mt-4">
-                <button type="submit" class="btn btn-primary w-45" onclick="validator()">수정하기</button>
-                <a th:href="@{/}" class="btn btn-secondary w-45">취소</a>
-            </div>
-        </form>
+                <!-- 버튼 -->
+                <div class="d-flex justify-content-between btn-group-custom mt-4">
+                    <button type="button" class="btn btn-outline-secondary" onclick="history.back()">← 취소</button>
+                    <button type="submit" class="btn btn-primary" onclick="validator()">수정하기</button>
+                </div>
+
+            </form>
+        </div>
     </div>
 </div>
 
 <script>
-
     function previewImage(event){
         const file = event.target.files[0];
         const reader = new FileReader();
@@ -186,7 +182,7 @@
         const form = document.querySelector("form");
         form.addEventListener("submit", validator);
     });
-
 </script>
+
 </body>
 </html>

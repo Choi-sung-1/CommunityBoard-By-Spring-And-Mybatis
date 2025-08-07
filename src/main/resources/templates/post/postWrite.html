@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="utf-8">
     <title>게시글 작성</title>
@@ -11,22 +11,62 @@
             font-size: 0.875rem;
             margin-top: 4px;
         }
+
         .field-error::before {
-            content: "⚠️";
+            content: "⚠️ ";
             font-size: 1rem;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .img-preview {
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .form-header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #previewCard img {
+            max-width: 150px;
+            max-height: 150px;
+            margin: 5px;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
-<div>
-    <h2>📝 게시글 작성</h2>
 
-    <h4 th:if="${loginMember == null}">로그인 후 이용해주세요.</h4>
-    <h4 th:if="${loginMember != null}" th:text="|로그인 사용자 : ${loginMember.memberLoginId}|">로그인 사용자</h4>
+<div class="card">
+    <div class="form-header">
+        📝 게시글 작성
+    </div>
+
+    <h5 th:if="${loginMember == null}" class="text-danger">로그인 후 이용해주세요.</h5>
+    <h6 th:if="${loginMember != null}" th:text="|로그인 사용자 : ${loginMember.memberLoginId}|" class="text-muted mb-3"></h6>
 
     <form id="postForm" name="postForm" method="post" th:object="${postVO}" enctype="multipart/form-data">
+
         <!-- 제목 -->
-        <div class="form-group mb-3">
+        <div class="mb-3">
             <label for="postTitle" class="form-label">제목</label>
             <input th:field="*{postTitle}" th:classappend="${#fields.hasErrors('postTitle')} ? ' is-invalid' : ''"
                    type="text" id="postTitle" class="form-control" placeholder="제목을 입력해주세요.">
@@ -34,44 +74,45 @@
         </div>
 
         <!-- 이미지 업로드 -->
-        <div class="form-group mb-3">
+        <div class="mb-3">
             <label for="imageInput" class="form-label">이미지 첨부</label>
-            <input type="file" id="imageInput" name="imageFiles" accept="image/*" multiple class="form-control" onchange="previewImages(event)">
-            <div id="previewCard" class="mt-2"></div>
+            <input type="file" id="imageInput" name="imageFiles" accept="image/*" multiple class="form-control"
+                   onchange="previewImages(event)">
+            <div id="previewCard" class="mt-3 d-flex flex-wrap"></div>
         </div>
 
         <!-- 내용 -->
-        <div class="form-group mb-3">
+        <div class="mb-3">
             <label for="postContent" class="form-label">내용</label>
             <textarea id="postContent" rows="6" th:classappend="${#fields.hasErrors('postContent')} ? ' is-invalid' : ''"
                       th:field="*{postContent}" class="form-control" placeholder="내용을 2글자 이상 입력해주세요."></textarea>
             <div class="field-error" th:errors="*{postContent}">postContent Error</div>
-
         </div>
 
-        <!-- 위치 선택 -->
+        <!-- 위치 선택 (지도 영역) -->
         <div id="container" class="mb-3" hidden>
             <label class="form-label">위치 선택</label>
-            <div id="map" style="width: 100%; height: 250px;" class="mb-2"></div>
-            <div id="result" class="mb-2">지도 클릭 시 정보 표시</div>
-            <button type="button" class="btn btn-sm btn-primary" onclick="selectLocation()">선택</button>
-            <button type="button" class="btn btn-sm btn-secondary" onclick="cancelLocation()">취소</button>
+            <div id="map" style="width: 100%; height: 250px;" class="mb-2 border rounded"></div>
+            <div id="result" class="mb-2 text-muted">🗺️ 지도 클릭 시 정보 표시</div>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-primary" onclick="selectLocation()">선택</button>
+                <button type="button" class="btn btn-sm btn-secondary" onclick="cancelLocation()">취소</button>
+            </div>
         </div>
 
-        <!-- 위치 표시 -->
-        <div id="locDiv" class="form-group mb-3">
-            <label class="form-label">📍장소</label>
+        <!-- 현재 위치 표시 -->
+        <div id="locDiv" class="mb-3">
+            <label class="form-label">📍 장소</label>
             <div id="currentAddress" class="mb-2" th:field="*{postRegisterLocation}"></div>
             <input type="hidden" th:field="*{postRegisterLocation}" id="postRegisterLocation">
             <button type="button" class="btn btn-outline-primary btn-sm" onclick="showMap()">위치선택</button>
         </div>
 
         <!-- 버튼 영역 -->
-        <div class="form-group mt-4">
-            <button type="submit" class="btn btn-success">작성하기</button>
+        <div class="d-flex justify-content-end gap-2 mt-4">
             <a th:href="@{/post/list}" class="btn btn-secondary">목록으로</a>
+            <button type="submit" class="btn btn-success">작성하기</button>
         </div>
-
     </form>
 </div>
 
@@ -111,7 +152,6 @@
                 onMarker(userLatLng);
             }, function(error) {
                 alert('위치 정보를 가져올 수 없습니다.');
-                console.error(error);
             });
         } else {
             alert('브라우저가 위치 정보를 지원하지 않습니다.');
@@ -141,7 +181,7 @@
 
     function selectLocation() {
         currentAdd.innerText = selectedAddress;
-        document.getElementById('postRegisterLocation').value = selectedAddress; // 이 줄 추가
+        document.getElementById('postRegisterLocation').value = selectedAddress;
         document.getElementById('container').hidden = true;
         document.getElementById('locDiv').hidden = false;
     }
@@ -151,18 +191,18 @@
         document.getElementById('container').hidden = true;
         document.getElementById('locDiv').hidden = false;
     }
+
     function previewImages(event) {
         const files = event.target.files;
         const previewCard = document.getElementById("previewCard");
-        previewCard.innerHTML = ""; // 이전 미리보기 초기화
+        previewCard.innerHTML = "";
 
         Array.from(files).forEach(file => {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = document.createElement("img");
                 img.src = e.target.result;
-                img.className = "img-fluid rounded m-1";
-                img.style.maxWidth = "200px";
+                img.alt = "첨부 이미지";
                 previewCard.appendChild(img);
             };
             reader.readAsDataURL(file);

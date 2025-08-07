@@ -28,14 +28,6 @@
             border-radius: 16px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-
-        .img-preview {
-            max-width: 200px;
-            max-height: 200px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
         .form-header {
             font-size: 1.5rem;
             font-weight: 600;
@@ -150,7 +142,7 @@
                 const userLatLng = new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 map.setCenter(userLatLng);
                 onMarker(userLatLng);
-            }, function(error) {
+            }, function() {
                 alert('위치 정보를 가져올 수 없습니다.');
             });
         } else {

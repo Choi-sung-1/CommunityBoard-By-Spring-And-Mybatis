@@ -5,80 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>마이페이지</title>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+
     <style>
-        .card-header, .card-body .info-row{
-            border-style: solid;
+        .field-error {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 4px;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+        .profile-card {
+            max-width: 600px;
+            margin: 40px auto;
+            border-radius: 16px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background-color: #fff;
+            padding: 24px;
+        }
+        .profile-header {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 12px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-label {
+            font-weight: 500;
+        }
+        .img-preview {
+            max-width: 150px;
+            border-radius: 12px;
         }
     </style>
 </head>
-
 <body>
-<div style="border-style: solid">
-    <div class="card-header">
-        👥 마이페이지
-    </div>
-    <!-- 🔽 form을 card-body 바깥에 둠 -->
-    <form method="post" enctype="multipart/form-data"
-          th:action="@{/member/profile/edit/{memberId}(memberId=${memberId})}">
-        <div class="card-body" th:object="${memberProfile}">
-            <!-- 프로필 이미지 있을 때 -->
-            <div class="info-row">
-                <label for="profileImage">이미지</label>
-                <div>
-                    <img th:src="${filePath}" src="첨부 이미지" alt="" id="profileImage" style="max-width:150px;" />
-                </div>
-                <div>
-                    <input type="file" name="profileImage" id="pfImage" accept="image/*" onchange="previewImage(event)"/>
-                </div>
-                <div id="previewCard" class="p-3 text-center">
-                    <img id="preview" src="" alt="미리보기 이미지" class="img-fluid rounded"/>
-                </div>
-            </div>
-
-            <!-- 한줄 소개 수정 가능하도록 -->
-            <div class="info-row">
-                <div>한줄소개</div>
-                <input type="text" id="profileOneLineBio" name="profileOneLineBio"
-                       th:value="*{profileOneLineBio}" />
-            </div>
-
-            <!-- 다른 정보는 읽기 전용 -->
-            <div class="info-row" >
-                <div>이름</div>
-                <input th:field="*{memberName}"/>
-            </div>
-            <div class="info-row">
-                <div>아이디</div>
-                <input type="text" th:field="*{memberLoginId}" readonly/>
-            </div>
-            <div class="info-row">
-                <div>이메일</div>
-                <input type="email" th:field="*{memberEmail}" readonly/>
-            </div>
-            <div class="info-row">
-                <div>생년월일</div>
-                <div th:text="*{memberBirth}"  readonly="">1990-01-01</div>
-            </div>
-            <div class="info-row">
-                <div>전화번호</div>
-                <input type="text" th:field="*{memberPhone}"/>
-            </div>
-
-            <!-- 수정 버튼 -->
-            <div class="info-row">
-                <button type="submit" class="btn btn-primary">수정하기</button>
-                <button th:onclick="|location.href='@{/member/profile'|" type="submit" class="btn btn-primary">취소</button>
-            </div>
+<div class="container">
+    <div class="profile-card">
+        <div class="profile-header">
+            👥 마이페이지
         </div>
-    </form>
+
+        <form method="post" enctype="multipart/form-data"
+              th:action="@{/member/profile/edit/{memberId}(memberId=${memberId})}"
+              th:object="${memberProfile}">
+
+            <!-- 프로필 이미지 -->
+            <div class="form-group text-center mb-4">
+                <label for="profileImage" class="form-label d-block">프로필 이미지</label>
+                <img th:src="${filePath}" src="첨부 이미지" alt="프로필 이미지"
+                     id="profileImage" class="img-preview mb-2" />
+                <input class="form-control" type="file" name="profileImage" id="pfImage" accept="image/*" onchange="previewImage(event)" />
+                <div id="previewCard" class="mt-3">
+                    <img id="preview" src="" alt="미리보기 이미지" class="img-preview d-block mx-auto" />
+                </div>
+            </div>
+
+            <!-- 한줄 소개 -->
+            <div class="form-group">
+                <label for="profileOneLineBio" class="form-label">한줄 소개</label>
+                <input type="text" id="profileOneLineBio" name="profileOneLineBio"
+                       th:value="*{profileOneLineBio}" class="form-control" />
+            </div>
+
+            <!-- 이름 -->
+            <div class="form-group">
+                <label class="form-label">이름</label>
+                <input type="text" th:field="*{memberName}" class="form-control" id="memberName"/>
+                <div class="field-error" id="nameError"></div>
+            </div>
+
+            <!-- 아이디 -->
+            <div class="form-group">
+                <label class="form-label">아이디</label>
+                <input type="text" th:field="*{memberLoginId}" class="form-control" readonly />
+            </div>
+
+            <!-- 이메일 -->
+            <div class="form-group">
+                <label class="form-label">이메일</label>
+                <input type="email" id="memberEmail" th:field="*{memberEmail}" class="form-control" />
+                <div class="field-error" id="emailError"></div>
+            </div>
+
+            <!-- 생년월일 -->
+            <div class="form-group">
+                <label class="form-label">생년월일</label>
+                <input type="text" th:value="*{memberBirth}" class="form-control" readonly />
+            </div>
+
+            <!-- 전화번호 -->
+            <div class="form-group">
+                <label class="form-label">전화번호</label>
+                <input type="text" id="memberPhone" th:field="*{memberPhone}" class="form-control" />
+                <div class="field-error" id="phoneError"></div>
+            </div>
+
+            <!-- 버튼 -->
+            <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn-primary w-45" onclick="validator()">수정하기</button>
+                <a th:href="@{/}" class="btn btn-secondary w-45">취소</a>
+            </div>
+        </form>
+    </div>
 </div>
-</body>
 
 <script>
+
     function previewImage(event){
         const file = event.target.files[0];
         const reader = new FileReader();
-
         reader.onload = function (e){
             const preview = document.getElementById("preview");
             const previewCard = document.getElementById("previewCard");
@@ -89,5 +129,64 @@
             reader.readAsDataURL(file);
         }
     }
+
+    function validator(event) {
+        let isValid = true;
+
+        // 이름 검증
+        const nameInput = document.getElementById("memberName");
+        const nameError = document.getElementById("nameError");
+        const name = nameInput.value.trim();
+        if (name.length < 2) {
+            nameError.textContent = "이름은 최소 2자 이상 입력해야 합니다.";
+            nameInput.classList.add("is-invalid");
+            isValid = false;
+        } else {
+            nameError.textContent = "";
+            nameInput.classList.remove("is-invalid");
+        }
+
+        // 전화번호 검증
+        const phoneInput = document.getElementById("memberPhone");
+        const phoneError = document.getElementById("phoneError");
+        const phone = phoneInput.value.trim();
+        const phoneRegex = /^010-\d{4}-\d{4}$/;
+
+        if (phone !== "" && !phoneRegex.test(phone)) {
+            phoneError.textContent = "전화번호는 010-1234-5678 형식이어야 합니다.";
+            phoneInput.classList.add("is-invalid");
+            isValid = false;
+        } else {
+            phoneError.textContent = "";
+            phoneInput.classList.remove("is-invalid");
+        }
+
+        // 이메일 검증
+        const emailInput = document.getElementById("memberEmail");
+        const emailError = document.getElementById("emailError");
+        const email = emailInput.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email !=="" && !emailRegex.test(email)) {
+            emailError.textContent = "유효한 이메일 형식을 입력하세요.";
+            emailInput.classList.add("is-invalid");
+            isValid = false;
+        } else {
+            emailError.textContent = "";
+            emailInput.classList.remove("is-invalid");
+        }
+
+        // 최종 검증 실패 시 폼 제출 막기
+        if (!isValid) {
+            event.preventDefault();
+        }
+    }
+
+    // 이벤트 바인딩
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        form.addEventListener("submit", validator);
+    });
+
 </script>
+</body>
 </html>

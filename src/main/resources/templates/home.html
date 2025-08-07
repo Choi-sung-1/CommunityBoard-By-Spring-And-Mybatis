@@ -5,38 +5,52 @@
     <title>홈 화면</title>
     <link th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
 
-<div>
-    <h1>홈 화면</h1>
+<div class="container py-5">
+    <div class="card mx-auto shadow-sm" style="max-width: 500px;">
+        <div class="card-body text-center">
+            <h2 class="mb-4">🏠 홈 화면</h2>
 
-    <div>
-        <div th:if="${loginMember ==null}">⚠️ 로그인 후 이용해주세요.</div>
-        <div th:if="${loginMember!= null}">👤 로그인 사용자: <span th:text="${loginMember.memberLoginId}">사용자 이름</span></div>
-    </div>
+            <!-- 로그인 상태 표시 -->
+            <div th:if="${loginMember == null}" class="alert alert-warning">
+                ⚠️ 로그인 후 이용해주세요.
+            </div>
+            <div th:if="${loginMember != null}" class="alert alert-success">
+                👤 로그인 사용자: <strong th:text="${loginMember.memberLoginId}">사용자 이름</strong>
+            </div>
 
-    <div>
-        <button th:if="${loginMember ==null}" th:onclick="|location.href='@{/member/join}'|">
-            <div>📝</div>
-            회원가입
-        </button>
+            <!-- 버튼 목록 -->
+            <div class="d-grid gap-2 col-8 mx-auto mt-4">
+                <!-- 비로그인 상태 -->
+                <button th:if="${loginMember == null}" class="btn btn-primary"
+                        th:onclick="|location.href='@{/member/join}'|">
+                    📝 회원가입
+                </button>
+                <button th:if="${loginMember == null}" class="btn btn-secondary"
+                        th:onclick="|location.href='/member/login'|">
+                    🔐 로그인
+                </button>
 
-        <button th:if="${loginMember==null}" th:onclick="|location.href='/member/login'|">
-            <div>🔐</div>
-            로그인
-        </button>
-        <button th:if="${loginMember!=null}" th:onclick="|location.href='/member/profile'|">
-            <div>👤</div>
-            회원정보
-        </button>
+                <!-- 로그인 상태 -->
+                <button th:if="${loginMember != null}" class="btn btn-secondary"
+                        th:onclick="|location.href='/member/profile'|">
+                    👤 회원정보
+                </button>
 
-        <button th:onclick="|location.href='/post/list'|">
-            <div>📄</div>
-            게시글
-        </button>
-        <a th:if="${loginMember !=null}" th:href="@{/member/logout}">
-            🚪 로그아웃
-        </a>
+                <!-- 공통 -->
+                <button class="btn btn-info" th:onclick="|location.href='/post/list'|">
+                    📄 게시글
+                </button>
+            </div>
+
+            <!-- 로그아웃 -->
+            <div th:if="${loginMember != null}" class="mt-4">
+                <a th:href="@{/member/logout}" class="btn btn-outline-danger">
+                    🚪 로그아웃
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 

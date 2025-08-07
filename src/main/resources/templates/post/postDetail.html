@@ -149,6 +149,11 @@ function onClickCommentButton() {
     const postId =document.getElementById('postId').dataset.postId;
     const memberId =document.getElementById('memberId').dataset.memberId
 
+    if (!commentContent || commentContent.trim() === '') {
+        // 공백 또는 비어 있는 댓글일 때 처리
+        alert("댓글을 작성해주세요.");
+        return;
+    }
     fetch('/comment/add',{
         method:'POST',
         headers:{'Content-Type':'application/json'},

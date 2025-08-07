@@ -2,57 +2,64 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
+    <title>로그인</title>
     <link th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .field-error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 4px;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: 80px auto;
+            padding: 30px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+    </style>
 </head>
-<style>
-    .field-error {
-        color: #dc3545;
-        font-weight: 600;
-        margin-top: 5px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 0.9rem;
-    }
-    .field-error::before {
-        content: "⚠️";
-        font-size: 1rem;
-    }
-</style>
 <body>
 <div class="container">
-    <h2>로그인</h2>
-    <form action="" method="post" th:object="${memberLoginDTO}">
-        <div role="alert">
-            <div class="field-error" th:if="${#fields.hasGlobalErrors()}" th:errors="*{global}"></div>
-        </div>
-        <div>
-            <label for="loginId">로그인 ID</label>
-            <input type="text" id="loginId" placeholder="아이디 입력" th:field="*{memberLoginId}">
-            <div class="field-error" th:errors="*{memberLoginId}">ID ERROR</div>
-        </div>
+    <div class="form-container">
+        <h2 class="text-center mb-4">🔐 로그인</h2>
 
-        <div>
-            <label for="password">비밀번호</label>
-            <input type="password" id="password"  placeholder="비밀번호 입력" th:field="*{memberPassword}">
-            <div class="field-error" th:errors="*{memberPassword}">PASSWORD ERROR</div>
-        </div>
+        <form action="" method="post" th:object="${memberLoginDTO}">
+            <!-- 전역 오류 -->
+            <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-danger py-2" role="alert"
+                 th:errors="*{global}">오류</div>
 
-        <div>
-            <a th:href="@{/member/join}">회원가입</a>
-        </div>
-
-        <div>
-            <div>
-                <button type="submit">로그인</button>
+            <!-- 로그인 ID -->
+            <div class="mb-3">
+                <label for="loginId" class="form-label">아이디</label>
+                <input type="text" th:classappend="${#fields.hasErrors('memberLoginId')} ? ' is-invalid' : ''"
+                       id="loginId" th:field="*{memberLoginId}" class="form-control" placeholder="아이디 입력">
+                <div class="field-error" th:errors="*{memberLoginId}">아이디 오류</div>
             </div>
-            <div>
-                <button type="button" class=""
+
+            <!-- 비밀번호 -->
+            <div class="mb-3">
+                <label for="password" class="form-label">비밀번호</label>
+                <input type="password" th:classappend="${#fields.hasErrors('memberPassword')} ? ' is-invalid' : ''"
+                       id="password" th:field="*{memberPassword}" class="form-control" placeholder="비밀번호 입력">
+                <div class="field-error" th:errors="*{memberPassword}">비밀번호 오류</div>
+            </div>
+
+            <!-- 회원가입 링크 -->
+            <div class="mb-3 text-end">
+                <a th:href="@{/member/join}" class="text-decoration-none">회원가입</a>
+            </div>
+
+            <!-- 버튼 -->
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">로그인</button>
+                <button type="button" class="btn btn-outline-secondary"
                         onclick="location.href='/'"
                         th:onclick="|location.href='@{/}'|">취소</button>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 </body>
 </html>

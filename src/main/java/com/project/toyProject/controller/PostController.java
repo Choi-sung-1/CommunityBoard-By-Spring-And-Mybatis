@@ -126,10 +126,12 @@ public class PostController {
     }
 //    게시글 수정 POST
 @PostMapping("/edit/{postId}")
-public String postEdit(@Validated @ModelAttribute("postDetailDTO") PostDetailDTO postDetailDTO,BindingResult bindingResult,
-                       @PathVariable("postId") Long postId,HttpSession session,Model model) {
+public String postEdit(@Validated @ModelAttribute("postDetailDTO") PostDetailDTO postDetailDTO,
+                       BindingResult bindingResult,
+                       @PathVariable("postId") Long postId,
+                       HttpSession session,Model model) {
+
     postEditAndWriteValidator.validate(postDetailDTO, bindingResult);
-    log.info(postDetailDTO.toString());
     if (bindingResult.hasErrors()) {
         PostDetailDTO findPostFilePathDTO = postService.findPostById(postId,session);
         postDetailDTO.setId(postId);

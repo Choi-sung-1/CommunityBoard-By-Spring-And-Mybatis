@@ -6,51 +6,59 @@
     <title>마이페이지</title>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
     <style>
-        .card-header, .card-body .info-row{
-            border-style: solid;
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(0,0,0,0.15);
+        }
+        .card {
+            max-width: 600px;
+            margin: 40px auto;
         }
     </style>
 </head>
 
 <body>
-<div>
-    <div style="border-style: solid">
-        <div class="card-header">
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-primary text-white fs-4 fw-semibold">
             👥 마이페이지
         </div>
+
         <div class="card-body" th:object="${memberProfile}">
-            <div class="info-row">
-                <label for="profileImage">이미지</label>
-                    <div>
-                        <img th:src="${filePath}" alt="프로필 이미지" id="profileImage"/>
-                    </div>
-                <label for="oneLineBio">한줄 소개</label>
-                <div th:text="*{profileOneLineBio}" id="oneLineBio">한줄 소개</div>
-            </div>
-            <div class="info-row">
-                <div>이름</div>
-                <div th:text="*{memberName}">홍길동</div>
-            </div>
-            <div class="info-row">
-                <div>아이디</div>
-                <div th:text="*{memberLoginId}">exampleId</div>
-            </div>
-            <div class="info-row">
-                <div>이메일</div>
-                <div th:text="*{memberEmail}">example@example.com</div>
-            </div>
-            <div class="info-row">
-                <div>생년월일</div>
-                <div th:text="*{memberBirth}">1990-01-01</div>
-            </div>
-            <div class="info-row">
-                <div>전화번호</div>
-                <div th:text="*{memberPhone}">010-1234-5678</div>
+            <div class="text-center mb-4">
+                <img th:src="${filePath}" alt="프로필 이미지" class="profile-image" id="profileImage"/>
+                <div class="mt-2 text-muted" th:text="*{profileOneLineBio}">한줄 소개</div>
             </div>
 
-            <div class="btn-group-custom">
-                <a type="button" th:href="@{/}">홈 화면</a>
-                <a type="button" th:href="@{/member/profile/edit/{memberId}(memberId=${memberId})}"> 수정하기</a>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between">
+                    <span class="fw-semibold">이름</span>
+                    <span th:text="*{memberName}">홍길동</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span class="fw-semibold">아이디</span>
+                    <span th:text="*{memberLoginId}">exampleId</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span class="fw-semibold">이메일</span>
+                    <span th:text="*{memberEmail}">example@example.com</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span class="fw-semibold">생년월일</span>
+                    <span th:text="*{memberBirth}">1990-01-01</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between">
+                    <span class="fw-semibold">전화번호</span>
+                    <span th:text="*{memberPhone}">010-1234-5678</span>
+                </li>
+            </ul>
+
+            <div class="mt-4 d-flex justify-content-between">
+                <a th:href="@{/}" class="btn btn-outline-secondary w-50 me-2">🏠 홈 화면</a>
+                <a th:href="@{/member/profile/edit/{memberId}(memberId=${memberId})}" class="btn btn-primary w-50">✏️ 수정하기</a>
             </div>
         </div>
     </div>

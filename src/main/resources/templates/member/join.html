@@ -1,85 +1,77 @@
- <!DOCTYPE HTML>
-   <html xmlns:th="http://www.thymeleaf.org">
-   <head>
-       <meta charset="utf-8">
-       <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-       <title>JOIN</title>
-       <style>
-           .field-error {
-               color: #dc3545;
-               font-weight: 600;
-               margin-top: 5px;
-               display: flex;
-               align-items: center;
-               gap: 6px;
-               font-size: 0.9rem;
-           }
-           .field-error::before {
-               content: "⚠️";
-               font-size: 1rem;
-           }
-       </style>
-   </head>
-       <body>
-       <div class="container">
-           <h2>회원 가입</h2>
-           <h6>회원 정보 입력</h6>
-           <form action="" method="post" th:object="${memberVO}">
-               <div class="form-group">
-                   <label for="loginId">로그인 ID</label>
-                   <input th:field="*{memberLoginId}"
-                          type="text" id="loginId"
-                          class="form-control"
-                          placeholder="아이디를 입력하세요.">
-                   <div class="field-error" th:errors="*{memberLoginId}"></div>
-               </div>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>회원 가입</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <style>
+        .field-error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 4px;
+        }
+        .field-error::before {
+            content: "⚠️";
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5" style="max-width: 500px;">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">회원 가입</h2>
 
-               <div class="form-group">
-                   <label for="password">비밀번호</label>
-                   <input type="password" id="password" class="form-control"
-                          placeholder="비밀번호를 입력하세요."
-                          th:field="*{memberPassword}"
-                   >
-                   <div class="field-error" th:errors="*{memberPassword}"></div>
-               </div>
+            <form method="post" th:object="${memberVO}">
+                <div class="mb-3">
+                    <label for="loginId" class="form-label">로그인 ID</label>
+                    <input type="text" th:classappend="${#fields.hasErrors('memberLoginId')} ? ' is-invalid' : ''"
+                           th:field="*{memberLoginId}" id="loginId" class="form-control" placeholder="아이디 입력">
+                    <p class="field-error is-invalid" th:errors="*{memberLoginId}"></p>
+                </div>
 
-               <div class="form-group">
-                   <label for="name">이름</label>
-                   <input type="text" id="name" class="form-control"
-                          th:field="*{memberName}"
-                          placeholder="예)홍길동">
-                   <div class="field-error" th:errors="*{memberName}"></div>
-               </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">비밀번호</label>
+                    <input type="password" th:classappend="${#fields.hasErrors('memberPassword')} ? ' is-invalid' : ''"
+                           th:field="*{memberPassword}" id="password" class="form-control" placeholder="비밀번호 입력">
+                    <p class="field-error is-invalid" th:errors="*{memberPassword}"></p>
+                </div>
 
-               <div class="form-group">
-                   <label for="birth">생년월일</label>
-                   <input type="date" id="birth" class="form-control" th:field="*{memberBirth}">
-                   <div class="field-error" th:errors="*{memberBirth}"></div>
-               </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">이름</label>
+                    <input type="text" th:classappend="${#fields.hasErrors('memberName')} ? ' is-invalid' : ''"
+                           th:field="*{memberName}" id="name" class="form-control" placeholder="예) 홍길동">
+                    <p class="field-error is-invalid" th:errors="*{memberName}"></p>
+                </div>
 
-               <div class="form-group">
-                   <label for="phone">전화번호</label>
-                   <input th:field="*{memberPhone}" type="tel" id="phone" class="form-control" placeholder="예)010-1234-1234">
-                   <div class="field-error" th:errors="*{memberPhone}"></div>
-               </div>
+                <div class="mb-3">
+                    <label for="birth" class="form-label">생년월일</label>
+                    <input type="date" th:classappend="${#fields.hasErrors('memberBirth')} ? ' is-invalid' : ''"
+                           th:field="*{memberBirth}" id="birth" class="form-control">
+                    <p class="field-error is-invalid" th:errors="*{memberBirth}"></p>
+                </div>
 
-               <div class="form-group">
-                   <label for="email">이메일</label>
-                   <input th:field="*{memberEmail}" type="email" id="email" class="form-control" placeholder="예)exam@xxx.com">
-                   <div class="field-error" th:errors="*{memberEmail}"></div>
-               </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">전화번호</label>
+                    <input type="tel" th:classappend="${#fields.hasErrors('memberPhone')} ? ' is-invalid' : ''"
+                           th:field="*{memberPhone}" id="phone" class="form-control" placeholder="예) 010-1234-5678">
+                    <p class="field-error is-invalid" th:errors="*{memberPhone}"></p>
+                </div>
 
-               <hr class="my-4">
+                <div class="mb-4">
+                    <label for="email" class="form-label">이메일</label>
+                    <input type="email" th:classappend="${#fields.hasErrors('memberEmail')} ? ' is-invalid' : ''"
+                           th:field="*{memberEmail}" id="email" class="form-control" placeholder="예) example@email.com">
+                    <p class="field-error" th:errors="*{memberEmail}"></p>
+                </div>
 
-               <div class="row g-3 d-flex">
-                   <div>
-                       <button type="submit" class="btn btn-primary btn-lg w-100">회원 가입</button>
-                   </div>
-                   <div>
-                       <a th:href="@{/}" class="btn btn-secondary btn-lg w-100">취소</a>
-                   </div>
-               </div>
-           </form>
-       </div>
-       </body>
-       </html>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">가입하기</button>
+                    <a th:href="@{/}" class="btn btn-secondary btn-lg">취소</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

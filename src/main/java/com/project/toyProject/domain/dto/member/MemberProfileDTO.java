@@ -16,7 +16,7 @@ public class MemberProfileDTO {
 
     private String memberName;
     private String memberLoginId;
-    private LocalDateTime memberBirth;
+    private String memberBirth;
     private String memberEmail;
     private String memberPhone;
 }

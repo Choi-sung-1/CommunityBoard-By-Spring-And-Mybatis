@@ -81,7 +81,9 @@ public class MemberController {
         return "/member/profileEdit";
     }
     @PostMapping("/profile/edit/{memberId}")
-    public String editProfile(@PathVariable Long memberId,@ModelAttribute MemberProfileDTO memberProfileDTO, @RequestParam("profileImage") MultipartFile pfImage) {
+    public String editProfile(@PathVariable Long memberId,
+                              @Validated @ModelAttribute MemberProfileDTO memberProfileDTO,
+                              @RequestParam("profileImage") MultipartFile pfImage) {
         memberService.updateMemberProfile(memberProfileDTO,pfImage,memberId);
         return "redirect:/member/profile";
     }

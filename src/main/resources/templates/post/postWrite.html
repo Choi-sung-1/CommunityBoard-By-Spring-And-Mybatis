@@ -8,12 +8,8 @@
     <style>
         .field-error {
             color: #dc3545;
-            font-weight: 600;
-            margin-top: 5px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
+            margin-top: 4px;
         }
         .field-error::before {
             content: "⚠️";
@@ -32,7 +28,8 @@
         <!-- 제목 -->
         <div class="form-group mb-3">
             <label for="postTitle" class="form-label">제목</label>
-            <input th:field="*{postTitle}" type="text" id="postTitle" class="form-control" placeholder="제목을 입력해주세요.">
+            <input th:field="*{postTitle}" th:classappend="${#fields.hasErrors('postTitle')} ? ' is-invalid' : ''"
+                   type="text" id="postTitle" class="form-control" placeholder="제목을 입력해주세요.">
             <div class="field-error" th:errors="*{postTitle}">postTitle Error</div>
         </div>
 
@@ -46,7 +43,8 @@
         <!-- 내용 -->
         <div class="form-group mb-3">
             <label for="postContent" class="form-label">내용</label>
-            <textarea id="postContent" rows="6" th:field="*{postContent}" class="form-control" placeholder="내용을 2글자 이상 입력해주세요."></textarea>
+            <textarea id="postContent" rows="6" th:classappend="${#fields.hasErrors('postContent')} ? ' is-invalid' : ''"
+                      th:field="*{postContent}" class="form-control" placeholder="내용을 2글자 이상 입력해주세요."></textarea>
             <div class="field-error" th:errors="*{postContent}">postContent Error</div>
 
         </div>

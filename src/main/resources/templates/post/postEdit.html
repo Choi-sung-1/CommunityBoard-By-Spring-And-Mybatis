@@ -8,12 +8,8 @@
   <style>
     .field-error {
       color: #dc3545;
-      font-weight: 600;
-      margin-top: 5px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.9rem;
+      font-size: 0.875rem;
+      margin-top: 4px;
     }
     .field-error::before {
       content: "⚠️";
@@ -38,14 +34,14 @@
       <!-- 제목 -->
       <div>
         <label for="postTitle">제목</label>
-        <input type="text" id="postTitle" placeholder="제목을 입력해주세요." th:field="*{postTitle}">
+        <input type="text" th:classappend="${#fields.hasErrors('postTitle')} ? ' is-invalid' : ''"
+               id="postTitle" placeholder="제목을 입력해주세요." th:field="*{postTitle}">
         <div class="field-error" th:errors="*{postTitle}">postTitle ERROR</div>
       </div>
       <!-- 이미지 -->
       <div>
         <label for="viewCard">이미지</label>
         <div th:each="file : ${postDetailDTO.fileList}">
-          <div th:text="@{|/postImages/${file.fileOriginalName}|}"></div>
           <img th:src="@{|/postImages/${file.fileOriginalName}|}" id="viewCard" style="max-width: 200px;" />
         </div>
       </div>
@@ -55,6 +51,7 @@
         <label for="postContent">내용</label>
         <div>
           <textarea id="postContent" name="content"
+                    th:classappend="${#fields.hasErrors('postContent')} ? ' is-invalid' : ''"
                     rows="6"
                     placeholder="내용을 입력해주세요."
                     th:field="*{postContent}"

@@ -15,24 +15,24 @@
                     👤 로그인 사용자: <span th:text="${loginUser.memberLoginId}">사용자</span>
             </span>
             <span>
-                    ✍️ 작성자: <span th:text="${post.memberLoginId}">작성자</span>
+                    ✍️ 작성자: <span th:text="${postDetailDTO.memberLoginId}">작성자</span>
             </span>
         </div>
         <div th:if="${loginUser==null}">
             <span>⚠️ 로그인 후 이용해주세요.</span>
         </div>
 
-        <form id="postForm" action="/post" method="post" th:object="${post}">
-            <div id="postId" th:attr="data-post-id=${post.id}" hidden="hidden"></div>
+        <form id="postForm" action="/post" method="post" th:object="${postDetailDTO}">
+            <div id="postId" th:attr="data-post-id=${postDetailDTO.id}" hidden="hidden"></div>
             <div id="memberId" th:if="${loginUser}!=null" th:attr="data-member-id=${loginUser.id}" hidden="hidden"></div>
             <div>
                 <label for="postTitle">제목</label>
                 <input type="text" id="postTitle" th:field="*{postTitle}" readonly>
             </div>
 
-            <div th:if="!${post.fileList.isEmpty()}">
+            <div th:if="!${postDetailDTO.fileList.isEmpty()}">
                 <label for="viewCard">이미지</label>
-                <div th:each="file : ${post.fileList}">
+                <div th:each="file : ${postDetailDTO.fileList}">
                     <img th:src="@{|/postImages/${file.fileOriginalName}|}" id="viewCard" style="max-width: 200px;" />
                 </div>
             </div>
@@ -76,7 +76,7 @@
                     <div>
                         <strong th:text="${comment.commentWriterName}">작성자</strong>
                         <small th:text="${comment.getCommentRegisterDate()}">날짜</small>
-                        <button th:if="${loginUser != null and post != null  and loginUser.memberLoginId == comment.commentWriterName}"
+                        <button th:if="${loginUser != null and postDetailDTO != null  and loginUser.memberLoginId == comment.commentWriterName}"
                                 type="button"
                                 onclick="deleteComment(this)">
                             🗑 삭제
@@ -88,11 +88,11 @@
             </div>
 
             <div>
-                <div th:if="${loginUser != null} and ${loginUser.memberLoginId} == ${post.memberLoginId}">
-                    <a th:href="@{/post/edit/{postId}(postId=${post.id})}">️✏️ 수정</a>
+                <div th:if="${loginUser != null} and ${loginUser.memberLoginId} == ${postDetailDTO.memberLoginId}">
+                    <a th:href="@{/post/edit/{postId}(postId=${postDetailDTO.id})}">️✏️ 수정</a>
                 </div>
-                <div th:if="${loginUser != null} and ${loginUser.memberLoginId} == ${post.memberLoginId}">
-                    <a th:href="@{/post/delete/{postId}(postId=${post.id})}" onclick="return deleteOnclick()">️❌ 삭제</a>
+                <div th:if="${loginUser != null} and ${loginUser.memberLoginId} == ${postDetailDTO.memberLoginId}">
+                    <a th:href="@{/post/delete/{postId}(postId=${postDetailDTO.id})}" onclick="return deleteOnclick()">️❌ 삭제</a>
                 </div>
                 <div>
                     <button type="button" th:onclick="|location.href='@{/post/list}'|">

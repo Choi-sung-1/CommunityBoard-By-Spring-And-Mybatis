@@ -30,20 +30,21 @@
                 👤 로그인 사용자: <span th:text="${loginUser.memberLoginId}">사용자</span>
             </span>
             <span>
-                ✍️ 작성자: <span th:text="${post.memberLoginId}">작성자</span>
+                ✍️ 작성자: <span th:text="${postDetailDTO.memberLoginId}">작성자</span>
             </span>
     </div>
 
-    <form id="postForm" method="post" th:object="${post}">
+    <form id="postForm" method="post" th:object="${postDetailDTO}">
       <!-- 제목 -->
       <div>
         <label for="postTitle">제목</label>
         <input type="text" id="postTitle" placeholder="제목을 입력해주세요." th:field="*{postTitle}">
+        <div class="field-error" th:errors="*{postTitle}">postTitle ERROR</div>
       </div>
       <!-- 이미지 -->
       <div>
         <label for="viewCard">이미지</label>
-        <div th:each="file : ${post.fileList}">
+        <div th:each="file : ${postDetailDTO.fileList}">
           <div th:text="@{|/postImages/${file.fileOriginalName}|}"></div>
           <img th:src="@{|/postImages/${file.fileOriginalName}|}" id="viewCard" style="max-width: 200px;" />
         </div>
@@ -58,6 +59,7 @@
                     placeholder="내용을 입력해주세요."
                     th:field="*{postContent}"
           ></textarea>
+          <div class="field-error" th:errors="*{postContent}">postContent ERROR</div>
       </div>
       </div>
 
@@ -67,7 +69,7 @@
           <button type="submit" id="submitButton">✔️ 저장</button>
         </div>
         <div>
-          <a th:href="@{/post/detail/setup/{postId}(postId=${post.id})}">️❌ 취소</a>
+          <a th:href="@{/post/detail/setup/{postId}(postId=${postDetailDTO.id})}">️❌ 취소</a>
         </div>
       </div>
     </form>

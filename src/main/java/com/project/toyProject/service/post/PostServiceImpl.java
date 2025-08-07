@@ -64,6 +64,7 @@ public class PostServiceImpl implements PostService {
         PostDetailDTO postDetailDTO = postDAO.selectPostById(id);
         List<FileVO> fileList = fileDAO.selectAll(id);
         postDetailDTO.setFileList(fileList);
+        log.info(postDetailDTO.toString());
         return  postDetailDTO;
     }
 

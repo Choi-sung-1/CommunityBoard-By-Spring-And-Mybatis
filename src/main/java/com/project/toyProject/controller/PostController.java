@@ -1,5 +1,6 @@
 package com.project.toyProject.controller;
 
+import com.project.toyProject.domain.dto.post.PostDetailDTO;
 import com.project.toyProject.domain.dto.post.PostEditDTO;
 import com.project.toyProject.domain.dto.post.PostListDTO;
 import com.project.toyProject.domain.dto.post.PostSearchDTO;
@@ -10,8 +11,8 @@ import com.project.toyProject.service.comment.CommentServiceImpl;
 import com.project.toyProject.service.member.MemberService;
 import com.project.toyProject.service.post.PostLikeStatusServiceImpl;
 import com.project.toyProject.service.post.PostServiceImpl;
-import com.project.toyProject.validation.post.PostEditValidator;
-import com.project.toyProject.validation.post.PostWriteValidator;
+import com.project.toyProject.validation.post.PostEditAndWriteValidator;
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +36,7 @@ public class PostController {
     private final PostServiceImpl postService;
     private final PostLikeStatusServiceImpl postLikeStatusService;
     private final CommentServiceImpl commentService;
-    private final PostWriteValidator postWriteValidator;
-    private final PostEditValidator postEditValidator;
+    private final PostEditAndWriteValidator postEditAndWriteValidator;
     public final static int PAGE_SIZE = 5;
 
     //    게시글 목록
@@ -89,7 +89,7 @@ public class PostController {
 //    게시글 작성 POST
     @PostMapping("/write")
     public String postWrite(@Validated @ModelAttribute PostVO postVO, BindingResult bindingResult, @RequestParam("imageFiles")MultipartFile[] files, HttpSession session) {
-        postWriteValidator.validate(postVO, bindingResult);
+        postEditAndWriteValidator.validate(postVO, bindingResult);
         if (bindingResult.hasErrors()) {
             return "/post/postWrite";
         }
@@ -103,7 +103,7 @@ public class PostController {
         String likeStatus = postLikeStatusService.getPostLikeStatus(postId,member.getId()).getPostLikeStatus();
         model.addAttribute("likeStatus",likeStatus);
         model.addAttribute("loginUser",member);
-        model.addAttribute("post",postService.findPostById(postId,session));
+        model.addAttribute("postDetailDTO",postService.findPostById(postId,session));
         model.addAttribute("comments",commentService.findAll(postId));
         log.info(commentService.toString());
         return "/post/postDetail";
@@ -112,7 +112,7 @@ public class PostController {
     @GetMapping("/edit/{postId}")
     public String postEdit(@PathVariable("postId")Long postId, Model model, HttpSession session) {
         session.setAttribute("readCountUpStatus",true);
-        model.addAttribute("post",postService.findPostById(postId,session));
+        model.addAttribute("postDetailDTO",postService.findPostById(postId,session));
         model.addAttribute("loginUser",memberService.findMemberById((Long)session.getAttribute("sessionId")));
         return "/post/postEdit";
     }
@@ -120,14 +120,29 @@ public class PostController {
     @GetMapping("/detail/setup/{postId}")
     public String postDetailSetup(@PathVariable("postId")Long postId, Model model, HttpSession session) {
         session.setAttribute("readCountUpStatus",true);
-        model.addAttribute("post",postService.findPostById(postId,session));
+        model.addAttribute("postDetailDTO",postService.findPostById(postId,session));
         model.addAttribute("loginUser",memberService.findMemberById((Long)session.getAttribute("sessionId")));
         return "/post/postDetail";
     }
 //    게시글 수정 POST
 @PostMapping("/edit/{postId}")
-public String postEdit(@Validated @ModelAttribute("post") PostEditDTO postEditDTO,
-                       @PathVariable("postId") Long postId,HttpSession session) {
+public String postEdit(@Validated @ModelAttribute("postDetailDTO") PostDetailDTO postDetailDTO,BindingResult bindingResult,
+                       @PathVariable("postId") Long postId,HttpSession session,Model model) {
+    postEditAndWriteValidator.validate(postDetailDTO, bindingResult);
+    log.info(postDetailDTO.toString());
+    if (bindingResult.hasErrors()) {
+        PostDetailDTO postDetailDTO1 = postService.findPostById(postId,session);
+        postDetailDTO.setId(postId);
+        postDetailDTO.setFileList(postDetailDTO1.getFileList());
+        model.addAttribute("postDetailDTO",postDetailDTO);
+        model.addAttribute("loginUser",memberService.findMemberById((Long)session.getAttribute("sessionId")));
+        return "/post/postEdit";
+    }
+
+    PostEditDTO postEditDTO = new PostEditDTO();
+    postEditDTO.setPostTitle(postDetailDTO.getPostTitle());
+    postEditDTO.setPostContent(postDetailDTO.getPostContent());
+
     postService.updatePost(postEditDTO, postId);
     session.setAttribute("readCountUpStatus", true);
     return "redirect:/post/detail/" + postId;

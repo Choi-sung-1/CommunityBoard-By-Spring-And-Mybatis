@@ -131,9 +131,9 @@ public String postEdit(@Validated @ModelAttribute("postDetailDTO") PostDetailDTO
     postEditAndWriteValidator.validate(postDetailDTO, bindingResult);
     log.info(postDetailDTO.toString());
     if (bindingResult.hasErrors()) {
-        PostDetailDTO postDetailDTO1 = postService.findPostById(postId,session);
+        PostDetailDTO findPostFilePathDTO = postService.findPostById(postId,session);
         postDetailDTO.setId(postId);
-        postDetailDTO.setFileList(postDetailDTO1.getFileList());
+        postDetailDTO.setFileList(findPostFilePathDTO.getFileList());
         model.addAttribute("postDetailDTO",postDetailDTO);
         model.addAttribute("loginUser",memberService.findMemberById((Long)session.getAttribute("sessionId")));
         return "/post/postEdit";

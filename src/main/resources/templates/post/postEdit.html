@@ -54,7 +54,7 @@
       <div class="mb-3">
         <label for="viewCard" class="form-label">이미지</label>
         <div th:each="file : ${postDetailDTO.fileList}">
-          <img th:src="@{|/postImages/${file.fileOriginalName}|}" style="max-width: 200px;" class="img-fluid" />
+          <img th:src="@{|/postImages/${file.fileOriginalName}|}"id="viewCard" style="max-width: 200px;" class="img-fluid" />
         </div>
       </div>
 

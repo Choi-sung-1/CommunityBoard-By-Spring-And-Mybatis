@@ -1,110 +1,174 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" rel="stylesheet">
     <title>게시글</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 900px;
+            margin-top: 2rem;
+        }
+        /* 이미지 그리드 */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        /* 각 이미지 아이템 */
+        .image-item {
+            width: 100%;
+            height: 250px; /* 고정 높이 */
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 비율 맞추며 자르기 */
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .image-item img:hover {
+            transform: scale(1.05);
+        }
+
+        .like-btn {
+            font-size: 1.1rem;
+        }
+        .commentBox {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            background-color: white;
+        }
+        textarea[readonly] {
+            background-color: #fdfdfd;
+            border: none;
+            resize: none;
+        }
+    </style>
 </head>
 <body>
-<div >
-    <div>
-        <h2>📌 게시글</h2>
-        <div th:if="${loginUser!=null}">
-            <span>
-                    👤 로그인 사용자: <span th:text="${loginUser.memberLoginId}">사용자</span>
-            </span>
-            <span>
-                    ✍️ 작성자: <span th:text="${postDetailDTO.memberLoginId}">작성자</span>
-            </span>
-        </div>
-        <div th:if="${loginUser==null}">
-            <span>⚠️ 로그인 후 이용해주세요.</span>
-        </div>
+<div class="container">
+    <div class="card shadow-sm">
+        <div class="card-body">
 
-        <form id="postForm" action="/post" method="post" th:object="${postDetailDTO}">
-            <div id="postId" th:attr="data-post-id=${postDetailDTO.id}" hidden="hidden"></div>
-            <div id="memberId" th:if="${loginUser}!=null" th:attr="data-member-id=${loginUser.id}" hidden="hidden"></div>
-            <div>
-                <label for="postTitle">제목</label>
-                <input type="text" id="postTitle" th:field="*{postTitle}" readonly>
+            <!-- 제목 -->
+            <h2 class="mb-4">📌 게시글</h2>
+
+            <!-- 로그인 정보 -->
+            <div th:if="${loginUser!=null}" class="mb-3 text-muted small">
+                👤 로그인 사용자: <strong th:text="${loginUser.memberLoginId}">사용자</strong> |
+                ✍️ 작성자: <strong th:text="${postDetailDTO.memberLoginId}">작성자</strong>
+            </div>
+            <div th:if="${loginUser==null}" class="alert alert-warning">
+                ⚠️ 로그인 후 이용해주세요.
             </div>
 
-            <div th:if="!${postDetailDTO.fileList.isEmpty()}">
-                <label for="viewCard">이미지</label>
-                <div th:each="file : ${postDetailDTO.fileList}">
-                    <img th:src="@{|/postImages/${file.fileOriginalName}|}" id="viewCard" style="max-width: 200px;" />
+            <form id="postForm" action="/post" method="post" th:object="${postDetailDTO}">
+                <div id="postId" th:attr="data-post-id=${postDetailDTO.id}" hidden></div>
+                <div id="memberId" th:if="${loginUser}!=null" th:attr="data-member-id=${loginUser.id}" hidden></div>
+
+                <!-- 제목 -->
+                <div class="mb-3">
+                    <h5>제목</h5>
+                    <input type="text" id="postTitle" th:field="*{postTitle}" class="form-control" readonly>
                 </div>
-            </div>
-            <div>
-                <label for="postContent">내용</label>
-                <div>
-                    <textarea th:text="*{postContent}" id="postContent" rows="6" readonly></textarea>
-                </div>
-                <div th:if="*{!postRegisterLocation.isEmpty()}">
-                    <label for="postRegisterLocation">📍장소</label>
-                    <input type="text" id="postRegisterLocation" readonly th:field="*{postRegisterLocation}" class="form-control w-100">
-                </div>
-            </div>
-            <div>
-                <div id="likeStatus" th:if="${likeStatus!=null}" th:attr="data-like-status=${likeStatus}" hidden></div>
-                <button id="likeButton"
-                        type="button"
-                        onclick="onClickLikeButton()">
-                    ❤️ <span th:text="*{postLikeCount}" id="likeCount">0</span>
-                </button>
 
-            </div>
-            <hr class="my-4">
-
-            <!-- 댓글 작성 폼 -->
-            <div class="mb-3" th:if="${loginUser!=null}">
-                <label for="commentContent">💬 댓글 작성</label>
-                    <div>
-                        <textarea id="commentContent" rows="3" placeholder="댓글을 입력하세요..."></textarea>
+                <!-- 이미지 -->
+                <div th:if="!${postDetailDTO.fileList.isEmpty()}" class="mb-3">
+                    <h5>이미지</h5>
+                    <div class="image-grid">
+                        <div th:each="file : ${postDetailDTO.fileList}" class="image-item">
+                            <img th:src="@{|/postImages/${file.fileOriginalName}|}" alt="게시글 이미지" />
+                        </div>
                     </div>
-
-                <div>
-                    <button id="commentButton" type="button" onclick="onClickCommentButton()">댓글 작성</button>
-                </div>
-            </div>
-
-            <!-- 댓글 목록 -->
-            <div id="commentList">
-                <h5>📝 댓글 목록</h5>
-                <div class="commentBox" th:each="comment:${comments}" th:attr="data-comment-id=${comment.id}">
-                    <div>
-                        <strong th:text="${comment.commentWriterName}">작성자</strong>
-                        <small th:text="${comment.getCommentRegisterDate()}">날짜</small>
-                        <button th:if="${loginUser != null and postDetailDTO != null  and loginUser.memberLoginId == comment.commentWriterName}"
-                                type="button"
-                                onclick="deleteComment(this)">
-                            🗑 삭제
-                        </button>
-                    </div>
-                    <textarea th:text="${comment.commentContent}" readonly >댓글 내용</textarea>
                 </div>
 
-            </div>
 
-            <div>
-                <div th:if="${loginUser != null} and ${loginUser.memberLoginId} == ${postDetailDTO.memberLoginId}">
-                    <a th:href="@{/post/edit/{postId}(postId=${postDetailDTO.id})}">️✏️ 수정</a>
+                <!-- 내용 -->
+                <div class="mb-3">
+                    <h5>내용</h5>
+                    <textarea th:text="*{postContent}" id="postContent" class="form-control" rows="6" readonly></textarea>
                 </div>
-                <div th:if="${loginUser != null} and ${loginUser.memberLoginId} == ${postDetailDTO.memberLoginId}">
-                    <a th:href="@{/post/delete/{postId}(postId=${postDetailDTO.id})}" onclick="return deleteOnclick()">️❌ 삭제</a>
+
+                <!-- 장소 -->
+                <div th:if="*{!postRegisterLocation.isEmpty()}" class="mb-3">
+                    <h5>📍 장소</h5>
+                    <input type="text" id="postRegisterLocation" readonly th:field="*{postRegisterLocation}" class="form-control">
                 </div>
-                <div>
-                    <button type="button" th:onclick="|location.href='@{/post/list}'|">
-                        📋 목록
+
+                <!-- 좋아요 -->
+                <div class="mb-4">
+                    <div id="likeStatus" th:if="${likeStatus!=null}" th:attr="data-like-status=${likeStatus}" hidden></div>
+                    <button id="likeButton" type="button" class="btn btn-outline-danger like-btn" onclick="onClickLikeButton()">
+                        ❤️ <span th:text="*{postLikeCount}" id="likeCount">0</span>
                     </button>
                 </div>
-            </div>
-        </form>
+
+                <hr>
+
+                <!-- 댓글 작성 -->
+                <div class="mb-4" th:if="${loginUser!=null}">
+                    <h5>💬 댓글 작성</h5>
+                    <textarea id="commentContent" class="form-control mb-2" rows="3" placeholder="댓글을 입력하세요..."></textarea>
+                    <button id="commentButton" type="button" class="btn btn-primary" onclick="onClickCommentButton()">댓글 작성</button>
+                </div>
+
+                <!-- 댓글 목록 -->
+                <div id="commentSection">
+                    <!-- 댓글 없을 때 -->
+                    <div th:if="${#lists.isEmpty(commentList)}" class="text-muted p-3 text-center">
+                        댓글이 없습니다.
+                    </div>
+                    <div th:unless="${#lists.isEmpty(commentList)}" id="commentList">
+                        <div th:each="comment : ${commentList}" class="commentBox">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <strong th:text="${comment.commentWriterName}"></strong>
+                                    <small class="text-muted ms-2" th:text="${comment.commentRegisterDate}"></small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteComment(this)">🗑 삭제</button>
+                            </div>
+                            <textarea readonly class="form-control" rows="2" th:text="${comment.commentContent}"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+
+                <hr>
+
+                <!-- 수정/삭제/목록 -->
+                <div class="d-flex gap-2">
+                    <a th:if="${loginUser != null} and ${loginUser.memberLoginId} == ${postDetailDTO.memberLoginId}"
+                       th:href="@{/post/edit/{postId}(postId=${postDetailDTO.id})}"
+                       class="btn btn-outline-secondary">✏️ 수정</a>
+
+                    <a th:if="${loginUser != null} and ${loginUser.memberLoginId} == ${postDetailDTO.memberLoginId}"
+                       th:href="@{/post/delete/{postId}(postId=${postDetailDTO.id})}"
+                       onclick="return deleteOnclick()"
+                       class="btn btn-outline-danger">❌ 삭제</a>
+
+                    <button type="button" th:onclick="|location.href='@{/post/list}'|" class="btn btn-outline-primary">📋 목록</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 </body>
 </html>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const likeStatusElement = document.getElementById("likeStatus");
@@ -170,39 +234,48 @@ function onClickCommentButton() {
         })
 }
 // 댓글 요소 추가
-function appendCommentList(comment){
-    const commentList = document.getElementById('commentList');
-    const commentBox = document.createElement("div");
-    commentBox.classList.add("commentBox");
-    commentBox.dataset.commentId = comment.id;
+    function appendCommentList(comment) {
+        const commentList = document.getElementById('commentList');
 
-    const topRow = document.createElement("div");
+        const commentBox = document.createElement("div");
+        commentBox.classList.add("commentBox");
+        commentBox.dataset.commentId = comment.id;
 
-    const writerInfo = document.createElement("div");
-    const strong = document.createElement("strong");
-    strong.textContent = comment.commentWriterName;
-    const small = document.createElement("small");
-    small.textContent = comment.commentRegisterDate;
+        // 상단 작성자/날짜 + 삭제 버튼
+        const topRow = document.createElement("div");
+        topRow.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2");
 
-    writerInfo.appendChild(strong);
-    writerInfo.appendChild(small);
+        const writerDiv = document.createElement("div");
+        const strong = document.createElement("strong");
+        strong.textContent = comment.commentWriterName;
+        const small = document.createElement("small");
+        small.textContent = comment.commentRegisterDate;
+        small.classList.add("text-muted", "ms-2");
 
-    topRow.appendChild(writerInfo);
+        writerDiv.appendChild(strong);
+        writerDiv.appendChild(small);
 
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "🗑 삭제";
-    deleteButton.setAttribute("onclick","deleteComment(this)");
-    writerInfo.appendChild(deleteButton);
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "🗑 삭제";
+        deleteButton.onclick = function () { deleteComment(deleteButton); };
+        deleteButton.classList.add("btn", "btn-sm", "btn-outline-danger");
 
-    const contentDiv = document.createElement("textarea");
-    contentDiv.setAttribute("readonly",true);
-    contentDiv.textContent = comment.commentContent;
+        topRow.appendChild(writerDiv);
+        topRow.appendChild(deleteButton);
 
-    commentBox.appendChild(topRow);
-    commentBox.appendChild(contentDiv);
+        // 댓글 내용
+        const contentTextarea = document.createElement("textarea");
+        contentTextarea.setAttribute("readonly", true);
+        contentTextarea.textContent = comment.commentContent;
+        contentTextarea.classList.add("form-control");
+        contentTextarea.rows = 2;
 
-    commentList.appendChild(commentBox);
-}
+        commentBox.appendChild(topRow);
+        commentBox.appendChild(contentTextarea);
+
+        commentList.appendChild(commentBox);
+    }
+
 // 댓글 삭제
 function deleteComment(button) {
     const commentBox = button.closest('.commentBox'); // 가장 가까운 부모 div 찾기
@@ -220,14 +293,17 @@ function deleteComment(button) {
 //     삭제는되는데 비동기로 삭제가안됨
 }
 // 좋아요 버튼 상태 업데이트
-function updateLikeButtonStyle(status) {
-    const likeButton = document.getElementById("likeButton");
+    function updateLikeButtonStyle(status) {
+        const likeButton = document.getElementById("likeButton");
 
-    if (status === "onClick") {
-        likeButton.classList.add("btn-danger");
-    } else {
-        likeButton.classList.remove("btn-danger");
+        if (status === "onClick") {
+            likeButton.classList.add("btn-danger");
+            likeButton.style.color = "white";  // 클릭 시 흰색 글자
+        } else {
+            likeButton.classList.remove("btn-danger");
+            likeButton.style.color = "red";    // 아닐 때 빨간 글자
+        }
     }
-}
+
 
 </script>

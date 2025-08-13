@@ -4,70 +4,76 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" rel="stylesheet">
-
+  <title>게시글 수정</title>
   <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
     .field-error {
       color: #dc3545;
       font-size: 0.875rem;
       margin-top: 4px;
     }
     .field-error::before {
-      content: "⚠️";
-      font-size: 1rem;
+      content: "⚠️ ";
     }
-  </style>  <title>게시글 수정</title>
+    img {
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-<div>
-  <div>
-    <h2>✏️ 게시글 수정</h2>
-    <div>
-            <span>
-                👤 로그인 사용자: <span th:text="${loginUser.memberLoginId}">사용자</span>
-            </span>
-            <span>
-                ✍️ 작성자: <span th:text="${postDetailDTO.memberLoginId}">작성자</span>
-            </span>
+<div class="container py-5">
+  <div class="card p-4">
+    <h2 class="mb-4">✏️ 게시글 수정</h2>
+
+    <div class="mb-3">
+      <span class="me-3">👤 <strong>로그인 사용자:</strong> <span th:text="${loginUser.memberLoginId}">사용자</span></span>
+      <span>✍️ <strong>작성자:</strong> <span th:text="${postDetailDTO.memberLoginId}">작성자</span></span>
     </div>
 
     <form id="postForm" method="post" th:object="${postDetailDTO}">
       <!-- 제목 -->
-      <div>
-        <label for="postTitle">제목</label>
-        <input type="text" th:classappend="${#fields.hasErrors('postTitle')} ? ' is-invalid' : ''"
-               id="postTitle" placeholder="제목을 입력해주세요." th:field="*{postTitle}">
-        <div class="field-error" th:errors="*{postTitle}">postTitle ERROR</div>
+      <div class="mb-3">
+        <label for="postTitle" class="form-label">제목</label>
+        <input type="text"
+               th:classappend="${#fields.hasErrors('postTitle')} ? 'is-invalid' : ''"
+               class="form-control"
+               id="postTitle"
+               placeholder="제목을 입력해주세요."
+               th:field="*{postTitle}">
+        <div class="field-error" th:errors="*{postTitle}"></div>
       </div>
+
       <!-- 이미지 -->
-      <div>
-        <label for="viewCard">이미지</label>
+      <div class="mb-3">
+        <label for="viewCard" class="form-label">이미지</label>
         <div th:each="file : ${postDetailDTO.fileList}">
-          <img th:src="@{|/postImages/${file.fileOriginalName}|}" id="viewCard" style="max-width: 200px;" />
+          <img th:src="@{|/postImages/${file.fileOriginalName}|}" style="max-width: 200px;" class="img-fluid" />
         </div>
       </div>
 
       <!-- 내용 -->
-      <div>
-        <label for="postContent">내용</label>
-        <div>
-          <textarea id="postContent" name="content"
-                    th:classappend="${#fields.hasErrors('postContent')} ? ' is-invalid' : ''"
-                    rows="6"
-                    placeholder="내용을 입력해주세요."
-                    th:field="*{postContent}"
-          ></textarea>
-          <div class="field-error" th:errors="*{postContent}">postContent ERROR</div>
-      </div>
+      <div class="mb-3">
+        <label for="postContent" class="form-label">내용</label>
+        <textarea id="postContent"
+                  th:classappend="${#fields.hasErrors('postContent')} ? 'is-invalid' : ''"
+                  class="form-control"
+                  rows="6"
+                  placeholder="내용을 입력해주세요."
+                  th:field="*{postContent}"></textarea>
+        <div class="field-error" th:errors="*{postContent}"></div>
       </div>
 
       <!-- 버튼 -->
-      <div>
-        <div>
-          <button type="submit" id="submitButton">✔️ 저장</button>
-        </div>
-        <div>
-          <a th:href="@{/post/detail/setup/{postId}(postId=${postDetailDTO.id})}">️❌ 취소</a>
-        </div>
+      <div class="d-flex justify-content-end gap-2">
+        <button type="submit" id="submitButton" class="btn btn-primary">✔️ 저장</button>
+        <a th:href="@{/post/detail/setup/{postId}(postId=${postDetailDTO.id})}" class="btn btn-outline-secondary">❌ 취소</a>
       </div>
     </form>
   </div>

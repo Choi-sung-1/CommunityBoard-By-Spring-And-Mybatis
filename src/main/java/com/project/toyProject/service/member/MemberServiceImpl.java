@@ -71,10 +71,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Boolean duplicateMemberLoginId(String memberLoginId) {
        MemberVO memberVO =  memberDAO.duplicateMember(memberLoginId);
-       if (memberVO != null) {
-           return true;
-       }
-        return false;
+        return memberVO != null;
     }
 
     //    기본 프로필 생성 함수

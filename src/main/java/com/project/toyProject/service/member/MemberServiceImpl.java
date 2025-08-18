@@ -10,6 +10,7 @@ import com.project.toyProject.domain.vo.MemberVO;
 import com.project.toyProject.domain.vo.ProfileVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,25 +29,38 @@ public class MemberServiceImpl implements MemberService {
     private final MemberDAO memberDAO;
     private final ProfileDAO profileDAO;
     private final FileDAO fileDAO;
+    private final BCryptPasswordEncoder passwordEncoder;
+
     @Override
     public void join(MemberVO memberVO) {
 
+        String rawPassword = memberVO.getMemberPassword();
+        String encodedPassword = passwordEncoder.encode(rawPassword);
 
+        memberVO.setMemberPassword(encodedPassword);
         memberDAO.insertMember(memberVO);
-        Long foundPK = memberDAO.selectLoginMemberPk(memberVO.getMemberLoginId(),memberVO.getMemberPassword());
-        initProfile(foundPK);
+
+        Optional<MemberVO> member = memberDAO.selectLoginMemberById(memberVO.getMemberLoginId());
+        initProfile(member.orElse(null).getId());
     }
 
     @Override
     public Optional<MemberVO> login(MemberLoginDTO memberLoginDTO) {
+        // 1. 아이디로 회원 조회
+        Optional<MemberVO> memberOpt = memberDAO.selectLoginMemberById(memberLoginDTO.getMemberLoginId());
 
-        Long foundPK = memberDAO.selectLoginMemberPk(memberLoginDTO.getMemberLoginId(),memberLoginDTO.getMemberPassword());
-        if(foundPK != null){
-//            여기서 찾아온 pk로 memberVO 객체 받아온다음 리턴
-            return memberDAO.selectLoginMember(foundPK);
+        if (memberOpt.isPresent()) {
+            MemberVO member = memberOpt.get();
+
+            // 2. 원본 비밀번호(raw) vs DB 암호화된 비밀번호(encoded) 비교
+            if (passwordEncoder.matches(memberLoginDTO.getMemberPassword(), member.getMemberPassword())) {
+                return Optional.of(member);
+            }
         }
+
         return Optional.empty();
     }
+
 
     @Override
     public MemberVO findMemberById(Long id) {

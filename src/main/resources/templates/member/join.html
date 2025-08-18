@@ -96,8 +96,6 @@
             alert('아이디에 공백을 포함할 수 없습니다.');
             return;
         }
-
-        // 5️⃣ 서버에 중복 검사 요청
         fetch(`/member/duplicate?memberLoginId=${encodeURIComponent(memberLoginId)}`)
             .then(response => response.json())
             .then(isAvailable => {

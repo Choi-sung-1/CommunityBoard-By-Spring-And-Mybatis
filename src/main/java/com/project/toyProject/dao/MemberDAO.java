@@ -16,8 +16,8 @@ public class MemberDAO {
     public void insertMember(MemberVO memberVO) {
         memberMapper.insertMember(memberVO);
     }
-    public Long selectLoginMemberPk(String memberLoginId,String memberPassword) {
-        return memberMapper.selectLoginMemberPK(memberLoginId,memberPassword);
+    public Optional<MemberVO> selectLoginMemberById(String memberLoginId) {
+        return memberMapper.selectLoginMemberById(memberLoginId);
     }
     public Optional<MemberVO> selectLoginMember(Long id) {
         return memberMapper.selectLoginMember(id);

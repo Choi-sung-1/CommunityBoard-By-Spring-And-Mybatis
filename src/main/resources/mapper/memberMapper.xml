@@ -13,9 +13,9 @@
                    #{memberPhone}, #{memberBirth}, #{memberEmail}
                )
     </insert>
-    <select id="selectLoginMemberPK">
-        SELECT ID FROM TBL_MEMBER
-        WHERE MEMBER_LOGIN_ID = #{memberLoginId} AND MEMBER_PASSWORD = #{memberPassword}
+    <select id="selectLoginMemberById">
+        SELECT * FROM TBL_MEMBER
+        WHERE MEMBER_LOGIN_ID = #{memberLoginId}
     </select>
     <select id="selectLoginMember">
         SELECT * FROM TBL_MEMBER

@@ -17,4 +17,6 @@ public interface MemberMapper {
     public Optional<MemberVO> selectLoginMember(Long id);
 //    회원 정보 수정
     public void updateMember(MemberProfileDTO memberProfileDTO);
+//    회원 아이디 중복 체크
+    public MemberVO duplicateMember(String memberLoginId);
 }

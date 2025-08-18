@@ -18,4 +18,6 @@ public interface MemberService {
     public MemberProfileDTO findMemberProfileById(Long id);
 //    회원 프로필 수정
     public void updateMemberProfile(MemberProfileDTO memberProfileDTO, MultipartFile file,Long memberId);
+//    회원 아이디 중복체크
+    public Boolean duplicateMemberLoginId(String memberLoginId);
 }

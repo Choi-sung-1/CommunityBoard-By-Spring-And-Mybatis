@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/","/api/kakaomap","/post/list","/member/join","/member/login","/member/logout","/css/**","/*.ico","/error");
+                .excludePathPatterns("/","/member/duplicate","/api/kakaomap","/post/list","/member/join","/member/login","/member/logout","/css/**","/*.ico","/error");
     }
 }
 

@@ -21,7 +21,7 @@ public class CommentController {
     @PostMapping("/add")
     @ResponseBody
     public ResponseEntity<CommentResponseDTO> writeComment(@RequestBody CommentRequestDTO commentRequestDTO) {
-
+        log.info(commentRequestDTO.toString());
         return ResponseEntity.ok(commentService.write(commentRequestDTO));
     }
     @DeleteMapping("/delete/{id}")

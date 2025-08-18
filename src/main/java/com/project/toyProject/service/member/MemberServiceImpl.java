@@ -30,6 +30,8 @@ public class MemberServiceImpl implements MemberService {
     private final FileDAO fileDAO;
     @Override
     public void join(MemberVO memberVO) {
+
+
         memberDAO.insertMember(memberVO);
         Long foundPK = memberDAO.selectLoginMemberPk(memberVO.getMemberLoginId(),memberVO.getMemberPassword());
         initProfile(foundPK);
@@ -66,7 +68,16 @@ public class MemberServiceImpl implements MemberService {
         memberDAO.updateMember(memberProfileDTO);
     }
 
-//    기본 프로필 생성 함수
+    @Override
+    public Boolean duplicateMemberLoginId(String memberLoginId) {
+       MemberVO memberVO =  memberDAO.duplicateMember(memberLoginId);
+       if (memberVO != null) {
+           return true;
+       }
+        return false;
+    }
+
+    //    기본 프로필 생성 함수
     public void initProfile(Long memberId){
 //        기본 프로필 한줄소개 설정
         ProfileVO profileVO = new ProfileVO();

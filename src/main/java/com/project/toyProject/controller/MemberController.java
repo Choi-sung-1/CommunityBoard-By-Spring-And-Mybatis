@@ -9,6 +9,7 @@ import com.project.toyProject.validation.member.MemberLoginValidator;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -91,5 +93,11 @@ public class MemberController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
+    }
+    @GetMapping("/member/duplicate")
+    @ResponseBody
+    public boolean checkId(@RequestParam String memberLoginId) {
+        // false → 사용 가능 /  true→ 이미 존재
+        return !memberService.duplicateMemberLoginId(memberLoginId);
     }
 }

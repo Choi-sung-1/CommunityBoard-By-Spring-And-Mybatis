@@ -25,4 +25,7 @@ public class MemberDAO {
     public void updateMember(MemberProfileDTO memberProfileDTO) {
         memberMapper.updateMember(memberProfileDTO);
     }
+    public MemberVO duplicateMember(String memberLoginId){
+        return memberMapper.duplicateMember(memberLoginId);
+    }
 }

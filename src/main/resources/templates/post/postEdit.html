@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +7,47 @@
   <title>게시글 수정</title>
   <style>
     body {
-      background-color: #f8f9fa;
+      background-color: #f5f7fa;
     }
     .card {
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      background: #ffffff;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h2 {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    .form-label {
+      font-weight: 600;
+      color: #444;
+    }
+    .form-control {
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+    }
+    textarea.form-control {
+      resize: none;
+    }
+    .btn {
+      border-radius: 0.75rem;
+      padding: 0.6rem 1.2rem;
+      font-weight: 500;
+      min-width: 100px;
+    }
+    .btn-primary {
+      background-color: #4e73df;
+      border: none;
+    }
+    .btn-outline-secondary {
+      border: 1.5px solid #d1d3e2;
+      color: #444;
+    }
+    .btn-outline-secondary:hover {
+      background: #f8f9fc;
     }
     .field-error {
       color: #dc3545;
@@ -22,18 +58,32 @@
       content: "⚠️ ";
     }
     img {
-      border-radius: 8px;
+      border-radius: 0.75rem;
       margin-top: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+    .info-box {
+      background: #f8f9fc;
+      padding: 12px 16px;
+      border-radius: 0.75rem;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .info-box strong {
+      color: #222;
     }
   </style>
 </head>
 <body>
 <div class="container py-5">
-  <div class="card p-4">
+  <div class="card">
     <h2 class="mb-4">✏️ 게시글 수정</h2>
 
-    <div class="mb-3">
-      <span class="me-3">👤 <strong>로그인 사용자:</strong> <span th:text="${loginUser.memberLoginId}">사용자</span></span>
+    <!-- 로그인/작성자 정보 -->
+    <div class="info-box">
+      <span>👤 <strong>로그인 사용자:</strong> <span th:text="${loginUser.memberLoginId}">사용자</span></span>
       <span>✍️ <strong>작성자:</strong> <span th:text="${postDetailDTO.memberLoginId}">작성자</span></span>
     </div>
 
@@ -52,9 +102,9 @@
 
       <!-- 이미지 -->
       <div class="mb-3">
-        <label for="viewCard" class="form-label">이미지</label>
+        <label class="form-label">이미지</label>
         <div th:each="file : ${postDetailDTO.fileList}">
-          <img th:src="@{|/postImages/${file.fileOriginalName}|}" alt="이미지파일" id="viewCard" style="max-width: 200px;" class="img-fluid" />
+          <img th:src="@{|/postImages/${file.fileOriginalName}|}" alt="이미지파일" style="max-width: 300px;" class="img-fluid" />
         </div>
       </div>
 
@@ -64,14 +114,14 @@
         <textarea id="postContent"
                   th:classappend="${#fields.hasErrors('postContent')} ? 'is-invalid' : ''"
                   class="form-control"
-                  rows="6"
+                  rows="8"
                   placeholder="내용을 입력해주세요."
                   th:field="*{postContent}"></textarea>
         <div class="field-error" th:errors="*{postContent}"></div>
       </div>
 
       <!-- 버튼 -->
-      <div class="d-flex justify-content-end gap-2">
+      <div class="d-flex justify-content-end gap-2 mt-4">
         <button type="submit" id="submitButton" class="btn btn-primary">✔️ 저장</button>
         <a th:href="@{/post/detail/setup/{postId}(postId=${postDetailDTO.id})}" class="btn btn-outline-secondary">❌ 취소</a>
       </div>

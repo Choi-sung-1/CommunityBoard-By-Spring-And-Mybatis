@@ -5,18 +5,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>게시글 목록</title>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card {
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            background-color: #4e73df;
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+            border-radius: 0.75rem 0.75rem 0 0;
+            padding: 0.75rem 1rem;
+        }
+
+        .btn-custom {
+            border-radius: 0.5rem;
+            font-weight: 600;
+            padding: 0.75rem 1.2rem; /* 버튼 높이 통일 */
+            font-size: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .btn-block {
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-color: #4e73df;
+            border: none;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+        }
+
+        .btn-outline-primary {
+            border-color: #4e73df;
+            color: #4e73df;
+            background-color: transparent;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #4e73df;
+            color: white;
+        }
+
+        .btn-outline-success {
+            border-color: #4e73df; /* 기존 파랑 계열로 통일 */
+            color: #4e73df;
+            background-color: transparent;
+        }
+
+        .btn-outline-success:hover {
+            background-color: #4e73df;
+            color: white;
+        }
+
+
+        .btn-outline-secondary {
+            border-color: #858796;
+            color: #858796;
+            background-color: transparent;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #858796;
+            color: white;
+        }
+
+        .btn-outline-danger {
+            border-color: #e74a3b;
+            color: #e74a3b;
+            background-color: transparent;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #e74a3b;
+            color: white;
+        }
+
+        table th, table td {
+            vertical-align: middle !important;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #4e73df;
+            border-color: #4e73df;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 <div class="container mt-5">
     <div class="row">
         <!-- 메인 컨텐츠 -->
         <div class="col-md-9">
-            <h2 class="mb-4">📌 게시글 목록</h2>
-
-            <!-- 검색 및 정렬 -->
-            <div class="card mb-4">
+            <div class="card">
+                <div class="card-header">📌 게시글 목록</div>
                 <div class="card-body">
-                    <form th:action="@{/post/list}" method="get" class="row gy-2 gx-3 align-items-center">
+
+                    <!-- 검색 -->
+                    <form th:action="@{/post/list}" method="get" class="row gy-2 gx-3 align-items-center mb-3">
                         <div class="col-auto">
                             <select class="form-select" name="type">
                                 <option value="title">제목</option>
@@ -28,91 +129,94 @@
                             <input type="text" name="keyword" class="form-control" placeholder="검색어 입력">
                         </div>
                         <div class="col-auto">
-                            <button type="submit" class="btn btn-primary">검색</button>
+                            <button type="submit" class="btn btn-primary btn-custom">검색</button>
                         </div>
                     </form>
+
+                    <!-- 정렬 버튼 -->
+                    <div class="mb-3">
+                        <a class="btn btn-outline-secondary btn-sm me-2"
+                           th:href="@{/post/list(sort='readCount', type=${type}, keyword=${keyword})}">
+                            인기순
+                        </a>
+                        <a class="btn btn-outline-secondary btn-sm "
+                           th:href="@{/post/list(sort='date', type=${type}, keyword=${keyword})}">
+                            최신순
+                        </a>
+                    </div>
+
+                    <!-- 게시글 테이블 -->
+                    <div th:if="${#lists.isEmpty(posts)}">
+                        <div class="alert alert-warning">게시글이 없습니다.</div>
+                    </div>
+
+                    <div th:unless="${#lists.isEmpty(posts)}">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                            <tr>
+                                <th>번호</th>
+                                <th>제목</th>
+                                <th>작성자</th>
+                                <th>조회수</th>
+                                <th>수정일</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="post, stat : ${posts}">
+                                <td th:text="${stat.count}">1</td>
+                                <td>
+                                    <a th:text="${post.postTitle}"
+                                       th:href="@{/post/detail/{postId}(postId=${post.id})}"
+                                       class="text-decoration-none text-dark fw-semibold"></a>
+                                </td>
+                                <td th:text="${post.memberLoginId}">작성자</td>
+                                <td th:text="${post.postReadCount}">10</td>
+                                <td th:text="${post.formattedPostUpdateDate}">2025-05-18</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 페이징 -->
+                    <nav th:if="${totalPages > 0}">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:if="${currentPage > 1}">
+                                <a class="page-link" th:href="@{/post/list(page=${currentPage - 1}, sort=${sort}, type=${type}, keyword=${keyword})}">이전</a>
+                            </li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                                th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link" th:href="@{/post/list(page=${i}, sort=${sort}, type=${type}, keyword=${keyword})}" th:text="${i}">1</a>
+                            </li>
+                            <li class="page-item" th:if="${currentPage < totalPages}">
+                                <a class="page-link" th:href="@{/post/list(page=${currentPage + 1}, sort=${sort}, type=${type}, keyword=${keyword})}">다음</a>
+                            </li>
+                        </ul>
+                    </nav>
+
                 </div>
             </div>
-
-            <!-- 정렬 -->
-            <div class="mb-3">
-                <a class="btn btn-outline-secondary btn-sm me-2"
-                   th:href="@{/post/list(sort='readCount', type=${type}, keyword=${keyword})}">
-                    인기순
-                </a>
-                <a class="btn btn-outline-secondary btn-sm"
-                   th:href="@{/post/list(sort='date', type=${type}, keyword=${keyword})}">
-                    최신순
-                </a>
-            </div>
-
-            <!-- 게시글 테이블 -->
-            <div th:if="${#lists.isEmpty(posts)}">
-                <div class="alert alert-warning">게시글이 없습니다.</div>
-            </div>
-
-            <div th:unless="${#lists.isEmpty(posts)}">
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
-                    <tr>
-                        <th>번호</th>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>조회수</th>
-                        <th>수정일</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="post, stat : ${posts}">
-                        <td th:text="${stat.count}">1</td>
-                        <td>
-                            <a th:text="${post.postTitle}"
-                               th:href="@{/post/detail/{postId}(postId=${post.id})}"
-                               class="text-decoration-none text-dark fw-semibold"></a>
-                        </td>
-                        <td th:text="${post.memberLoginId}">작성자</td>
-                        <td th:text="${post.postReadCount}">10</td>
-                        <td th:text="${post.formattedPostUpdateDate}">2025-05-18</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- 페이징 -->
-            <nav th:if="${totalPages > 0}">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" th:if="${currentPage > 1}">
-                        <a class="page-link" th:href="@{/post/list(page=${currentPage - 1}, sort=${sort}, type=${type}, keyword=${keyword})}">이전</a>
-                    </li>
-                    <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}"
-                        th:classappend="${i == currentPage} ? 'active'">
-                        <a class="page-link" th:href="@{/post/list(page=${i}, sort=${sort}, type=${type}, keyword=${keyword})}" th:text="${i}">1</a>
-                    </li>
-                    <li class="page-item" th:if="${currentPage < totalPages}">
-                        <a class="page-link" th:href="@{/post/list(page=${currentPage + 1}, sort=${sort}, type=${type}, keyword=${keyword})}">다음</a>
-                    </li>
-                </ul>
-            </nav>
         </div>
 
-        <!-- 사이드바 (회원 정보) -->
+        <!-- 사이드바 -->
         <div class="col-md-3">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body text-center">
                     <div th:if="${loginMember != null}">
                         <h5 class="card-title">👤 회원 정보</h5>
                         <p th:text="|아이디: ${loginMember.memberLoginId}|">로그인 사용자</p>
                         <div class="d-grid gap-2">
-                            <a th:href="@{/member/profile}" class="btn btn-outline-primary btn-sm">마이 페이지</a>
-                            <a th:href="@{/post/write}" class="btn btn-outline-success btn-sm">새 글 작성</a>
-                            <a th:href="@{/}" class="btn btn-outline-secondary btn-sm">홈 화면</a>
-                            <a th:href="@{/member/logout}" class="btn btn-outline-danger btn-sm">로그아웃</a>
+                            <a th:href="@{/member/profile}" class="btn btn-outline-primary btn-custom btn-block">마이 페이지</a>
+                            <a th:href="@{/post/write}" class="btn btn-outline-success btn-custom btn-block">새 글 작성</a>
+                            <a th:href="@{/}" class="btn btn-outline-secondary btn-custom btn-block">홈 화면</a>
+                            <a th:href="@{/member/logout}" class="btn btn-outline-danger btn-custom btn-block">로그아웃</a>
                         </div>
                     </div>
                     <div th:if="${loginMember == null}">
                         <div class="alert alert-warning">⚠️ 로그인 후 이용해주세요.</div>
-                        <a th:href="@{/member/login}" class="btn btn-primary btn-sm mb-2">로그인</a>
-                        <a th:href="@{/}" class="btn btn-secondary btn-sm">홈 화면</a>
+                        <div class="d-grid gap-2">
+                            <a th:href="@{/member/login}" class="btn btn-primary btn-custom btn-block">로그인</a>
+                            <a th:href="@{/}" class="btn btn-outline-secondary btn-custom btn-block">홈 화면</a>
+                        </div>
                     </div>
                 </div>
             </div>

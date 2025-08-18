@@ -6,6 +6,29 @@
     <title>마이페이지</title>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
     <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card {
+            max-width: 400px; /* 로그인/홈 화면과 통일 */
+            margin: 80px auto;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            background-color: #4e73df;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-align: center;
+            border-radius: 0.75rem 0.75rem 0 0;
+            padding: 1rem;
+        }
+
         .profile-image {
             width: 150px;
             height: 150px;
@@ -13,53 +36,92 @@
             border-radius: 50%;
             box-shadow: 0 0 8px rgba(0,0,0,0.15);
         }
-        .card {
-            max-width: 600px;
-            margin: 40px auto;
+
+        .profile-bio {
+            margin-top: 0.5rem;
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+
+        .list-group-item {
+            border: none;
+            padding: 0.75rem 0;
+        }
+
+        .list-group-item span.fw-semibold {
+            font-weight: 600;
+        }
+
+        .btn-custom {
+            border-radius: 0.5rem;
+            font-weight: 600;
+            padding: 0.6rem 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #4e73df;
+            border: none;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+        }
+
+        .btn-outline-secondary {
+            border-color: #858796;
+            color: #858796;
+            background-color: transparent;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #858796;
+            color: white;
+        }
+
+        .d-flex > .btn {
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
 
 <body>
-<div class="container">
-    <div class="card">
-        <div class="card-header bg-primary text-white fs-4 fw-semibold">
-            👥 마이페이지
-        </div>
+<div class="card">
+    <div class="card-header">
+        👥 마이페이지
+    </div>
 
-        <div class="card-body" th:object="${memberProfile}">
-            <div class="text-center mb-4">
-                <img th:src="${filePath}" alt="프로필 이미지" class="profile-image" id="profileImage"/>
-                <div class="mt-2 text-muted" th:text="*{profileOneLineBio}">한줄 소개</div>
-            </div>
+    <div class="card-body text-center" th:object="${memberProfile}">
+        <img th:src="${filePath}" alt="프로필 이미지" class="profile-image" id="profileImage"/>
+        <div class="profile-bio" th:text="*{profileOneLineBio}">한줄 소개</div>
 
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between">
-                    <span class="fw-semibold">이름</span>
-                    <span th:text="*{memberName}">홍길동</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between">
-                    <span class="fw-semibold">아이디</span>
-                    <span th:text="*{memberLoginId}">exampleId</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between">
-                    <span class="fw-semibold">이메일</span>
-                    <span th:text="*{memberEmail}">example@example.com</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between">
-                    <span class="fw-semibold">생년월일</span>
-                    <span th:text="*{memberBirth}">1990-01-01</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between">
-                    <span class="fw-semibold">전화번호</span>
-                    <span th:text="*{memberPhone}">010-1234-5678</span>
-                </li>
-            </ul>
+        <ul class="list-group list-group-flush mt-4 text-start">
+            <li class="list-group-item d-flex justify-content-between">
+                <span class="fw-semibold">이름</span>
+                <span th:text="*{memberName}">홍길동</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <span class="fw-semibold">아이디</span>
+                <span th:text="*{memberLoginId}">exampleId</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <span class="fw-semibold">이메일</span>
+                <span th:text="*{memberEmail}">example@example.com</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <span class="fw-semibold">생년월일</span>
+                <span th:text="*{memberBirth}">1990-01-01</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <span class="fw-semibold">전화번호</span>
+                <span th:text="*{memberPhone}">010-1234-5678</span>
+            </li>
+        </ul>
 
-            <div class="mt-4 d-flex justify-content-between">
-                <a onclick="history.back()" class="btn btn-outline-secondary w-50 me-2">뒤로 가기</a>
-                <a th:href="@{/member/profile/edit/{memberId}(memberId=${memberId})}" class="btn btn-primary w-50">✏️ 수정하기</a>
-            </div>
+        <div class="mt-4 d-flex gap-2">
+            <a onclick="history.back()" class="btn btn-outline-secondary btn-custom w-50">뒤로 가기</a>
+            <a th:href="@{/member/profile/edit/{memberId}(memberId=${memberId})}" class="btn btn-primary btn-custom w-50">✏️ 수정하기</a>
         </div>
     </div>
 </div>

@@ -4,55 +4,140 @@
     <meta charset="utf-8">
     <title>홈 화면</title>
     <link th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card {
+            border-radius: 1rem;
+            padding: 2.5rem;
+            max-width: 400px; /* 로그인 페이지와 비슷한 크기 */
+            margin: 80px auto;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            font-weight: 700;
+            font-size: 1.75rem;
+            color: #333;
+        }
+
+        .btn-custom {
+            border-radius: 0.5rem;
+            font-weight: 600;
+            padding: 0.6rem 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #4e73df;
+            border: none;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+        }
+
+        .btn-outline-primary {
+            border-color: #4e73df;
+            color: #4e73df;
+            background-color: transparent;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #4e73df;
+            color: white;
+        }
+
+        .btn-outline-success {
+            border-color: #1cc88a;
+            color: #1cc88a;
+            background-color: transparent;
+        }
+
+        .btn-outline-success:hover {
+            background-color: #1cc88a;
+            color: white;
+        }
+
+        .btn-outline-info {
+            border-color: #36b9cc;
+            color: #36b9cc;
+            background-color: transparent;
+        }
+
+        .btn-outline-info:hover {
+            background-color: #36b9cc;
+            color: white;
+        }
+
+        .btn-outline-danger {
+            border-color: #e74a3b;
+            color: #e74a3b;
+            background-color: transparent;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #e74a3b;
+            color: white;
+        }
+
+        .d-grid > .btn {
+            margin-bottom: 0.5rem;
+        }
+
+        .alert {
+            border-radius: 0.5rem;
+            font-weight: 500;
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body>
+<div class="card text-center">
+    <h2 class="mb-4">🏠 홈 화면</h2>
 
-<div class="container py-5">
-    <div class="card mx-auto shadow-sm" style="max-width: 500px;">
-        <div class="card-body text-center">
-            <h2 class="mb-4">🏠 홈 화면</h2>
+    <!-- 로그인 상태 표시 -->
+    <div th:if="${loginMember == null}" class="alert alert-warning">
+        ⚠️ 로그인 후 이용해주세요.
+    </div>
+    <div th:if="${loginMember != null}" class="alert alert-success">
+        👤 로그인 사용자: <strong th:text="${loginMember.memberLoginId}">사용자 이름</strong>
+    </div>
 
-            <!-- 로그인 상태 표시 -->
-            <div th:if="${loginMember == null}" class="alert alert-warning">
-                ⚠️ 로그인 후 이용해주세요.
-            </div>
-            <div th:if="${loginMember != null}" class="alert alert-success">
-                👤 로그인 사용자: <strong th:text="${loginMember.memberLoginId}">사용자 이름</strong>
-            </div>
+    <!-- 버튼 목록 -->
+    <div class="d-grid gap-2 mt-4">
+        <!-- 비로그인 상태 -->
+        <button th:if="${loginMember == null}" class="btn btn-primary btn-custom"
+                th:onclick="|location.href='@{/member/join}'|">
+            📝 회원가입
+        </button>
+        <button th:if="${loginMember == null}" class="btn btn-outline-primary btn-custom"
+                th:onclick="|location.href='/member/login'|">
+            🔐 로그인
+        </button>
 
-            <!-- 버튼 목록 -->
-            <div class="d-grid gap-2 col-8 mx-auto mt-4">
-                <!-- 비로그인 상태 -->
-                <button th:if="${loginMember == null}" class="btn btn-primary"
-                        th:onclick="|location.href='@{/member/join}'|">
-                    📝 회원가입
-                </button>
-                <button th:if="${loginMember == null}" class="btn btn-secondary"
-                        th:onclick="|location.href='/member/login'|">
-                    🔐 로그인
-                </button>
+        <!-- 로그인 상태 -->
+        <button th:if="${loginMember != null}" class="btn btn-outline-success btn-custom"
+                th:onclick="|location.href='/member/profile'|">
+            👤 회원정보
+        </button>
 
-                <!-- 로그인 상태 -->
-                <button th:if="${loginMember != null}" class="btn btn-secondary"
-                        th:onclick="|location.href='/member/profile'|">
-                    👤 회원정보
-                </button>
+        <!-- 공통 -->
+        <button class="btn btn-outline-info btn-custom"
+                th:onclick="|location.href='/post/list'|">
+            📄 게시글
+        </button>
+    </div>
 
-                <!-- 공통 -->
-                <button class="btn btn-info" th:onclick="|location.href='/post/list'|">
-                    📄 게시글
-                </button>
-            </div>
-
-            <!-- 로그아웃 -->
-            <div th:if="${loginMember != null}" class="mt-4">
-                <a th:href="@{/member/logout}" class="btn btn-outline-danger">
-                    🚪 로그아웃
-                </a>
-            </div>
-        </div>
+    <!-- 로그아웃 -->
+    <div th:if="${loginMember != null}" class="mt-4">
+        <a th:href="@{/member/logout}" class="btn btn-outline-danger btn-custom">
+            🚪 로그아웃
+        </a>
     </div>
 </div>
-
 </body>
 </html>

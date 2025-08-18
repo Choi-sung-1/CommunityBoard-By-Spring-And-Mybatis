@@ -16,6 +16,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -94,8 +96,10 @@ public class MemberController {
     }
     @GetMapping("/member/duplicate")
     @ResponseBody
-    public boolean checkId(@RequestParam String memberLoginId) {
-        // false → 사용 가능 /  true→ 이미 존재
-        return !memberService.duplicateMemberLoginId(memberLoginId);
+    public Map<String,Boolean> checkId(@RequestParam String memberLoginId) {
+        boolean available = !memberService.duplicateMemberLoginId(memberLoginId);
+        Map<String,Boolean> result = new HashMap<>();
+        result.put("available",available);
+        return result;
     }
 }

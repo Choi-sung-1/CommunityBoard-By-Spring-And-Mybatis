@@ -119,7 +119,7 @@
 
             <!-- 로그인/작성자 정보 -->
             <div th:if="${loginUser!=null}" class="mb-3 text-muted small">
-                👤 로그인: <strong th:text="${loginUser.memberLoginId}">사용자</strong> |
+                👤 사용자: <strong th:text="${loginUser.memberLoginId}">사용자</strong> |
                 ✍️ 작성자: <strong th:text="${postDetailDTO.memberLoginId}">작성자</strong>
             </div>
             <div th:if="${loginUser==null}" class="alert alert-warning">

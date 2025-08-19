@@ -5,76 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link th:href="@{/css/bootstrap.min.css}" href="/css/bootstrap.min.css" rel="stylesheet">
   <title>게시글 수정</title>
-  <style>
-    body {
-      background-color: #f5f7fa;
-    }
-    .card {
-      border-radius: 1rem;
-      padding: 2rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-      background: #ffffff;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    h2 {
-      font-weight: bold;
-      color: #2c3e50;
-    }
-    .form-label {
-      font-weight: 600;
-      color: #444;
-    }
-    .form-control {
-      border-radius: 0.75rem;
-      padding: 0.75rem 1rem;
-    }
-    textarea.form-control {
-      resize: none;
-    }
-    .btn {
-      border-radius: 0.75rem;
-      padding: 0.6rem 1.2rem;
-      font-weight: 500;
-      min-width: 100px;
-    }
-    .btn-primary {
-      background-color: #4e73df;
-      border: none;
-    }
-    .btn-outline-secondary {
-      border: 1.5px solid #d1d3e2;
-      color: #444;
-    }
-    .btn-outline-secondary:hover {
-      background: #f8f9fc;
-    }
-    .field-error {
-      color: #dc3545;
-      font-size: 0.875rem;
-      margin-top: 4px;
-    }
-    .field-error::before {
-      content: "⚠️ ";
-    }
-    img {
-      border-radius: 0.75rem;
-      margin-top: 10px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-    }
-    .info-box {
-      background: #f8f9fc;
-      padding: 12px 16px;
-      border-radius: 0.75rem;
-      margin-bottom: 20px;
-      font-size: 0.95rem;
-      display: flex;
-      justify-content: space-between;
-    }
-    .info-box strong {
-      color: #222;
-    }
-  </style>
+  <link rel="stylesheet" th:href="@{/css/post/postEdit.css}">
 </head>
 <body>
 <div class="container py-5">

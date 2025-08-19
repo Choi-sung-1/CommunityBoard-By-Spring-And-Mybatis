@@ -1,0 +1,85 @@
+body {
+    background-color: #f5f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.form-header {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.field-error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 4px;
+}
+.field-error::before {
+    content: "⚠️ ";
+    font-size: 1rem;
+}
+
+#previewCard img {
+    max-width: 150px;
+    max-height: 150px;
+    margin: 5px;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.btn-custom {
+    border-radius: 0.5rem;
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.btn-success {
+    background-color: #4e73df;
+    border: none;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #2e59d9;
+}
+
+.btn-outline-primary {
+    border-color: #4e73df;
+    color: #4e73df;
+    background-color: transparent;
+}
+.btn-outline-primary:hover {
+    background-color: #4e73df;
+    color: white;
+}
+
+.btn-outline-secondary {
+    border-color: #858796;
+    color: #858796;
+    background-color: transparent;
+}
+.btn-outline-secondary:hover {
+    background-color: #858796;
+    color: white;
+}
+
+.form-label {
+    font-weight: 600;
+}
+
+textarea.form-control {
+    resize: vertical;
+}

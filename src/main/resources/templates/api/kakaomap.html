@@ -1,36 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="utf-8"/>
     <title>Kakao 지도 시작하기</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .container {
-            text-align: center;
-        }
-
-        #map {
-            width: 700px;
-            height: 600px;
-            margin: 0 auto;
-        }
-
-        #result {
-            margin-top: 15px;
-            font-size: 16px;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/api/kakaomap.css}">
 </head>
 <body>
 <!--지도와 밑의 메시지를 저장 할 컨테이너-->
@@ -41,91 +14,6 @@
 
 <!-- Kakao Maps API -->
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1553256d332dc51b9fb4eb124bdfb16d&libraries=services,clusterer,drawing"></script>
-
-<script>
-<!--    맵 기본설정-->
-    var mapContainer = document.getElementById('map'),
-        mapOption = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667),
-            level: 3
-        };
-    // 지도 생성
-    var map = new kakao.maps.Map(mapContainer, mapOption);
-    // 좌표를 주소로 가져오기위한 객체 생성
-    var geocoder = new kakao.maps.services.Geocoder();
-    // 지도의 크기 스카이뷰 위성뷰 등을 위한 객체 생성
-    var mapTypeControl = new kakao.maps.MapTypeControl();
-    // TOPIGHT로 제어할 수 있는 버튼을 넣어줌
-    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-    var zoomControl = new kakao.maps.ZoomControl();
-    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-
-    // 지도에 표기할 마커 생성
-    var marker = new kakao.maps.Marker({position: map.getCenter()});
-    // 마커위에 띄어줄 인포윈도우 객체 생성
-    var infoWindow = new kakao.maps.InfoWindow({zIndex: 1});
-
-    // ✅ 현재 위치 가져옴
-    if (navigator.geolocation) {
-        // 현재 위치를 가져오기위함
-        navigator.geolocation.getCurrentPosition(function (position) {
-            // 현재 위도
-            var lat = position.coords.latitude;
-            // 현재 경도
-            var lng = position.coords.longitude;
-            // 현재 사용자의 위치를 좌표로 생성
-            var userLatLng = new kakao.maps.LatLng(lat, lng);
-            displayAddressAtCoords(userLatLng);
-        });
-    }
-
-    // ✅ 지도 클릭 시 주소 및 마커 표시
-    kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
-        var clickedLatLng = mouseEvent.latLng;
-        displayAddressAtCoords(clickedLatLng);
-    });
-
-    // ✅ 좌표 → 주소 변환
-    function searchAddFromCoords(coords, callback) {
-        geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
-    }
-
-    // ✅ 공통 주소 처리 함수 (주소 검색 → 마커 및 인포윈도우 표시)
-    function displayAddressAtCoords(coords) {
-        searchAddFromCoords(coords, function (result, status) {
-            // 받아온 콜백 함수가 ok일 경우 밑에 코드 호출
-            if (status === kakao.maps.services.Status.OK) {
-                // 도로명 주소를 받아오기위함
-                var roadAddress = result[0].road_address;
-                // 지번 주소를 받아오기 위함
-                var jibunAddress = result[0].address;
-                // 결과 메세지를 담기위해 태그 가져옴
-                var resultText = document.getElementById('result');
-                // 주소를 담기위한 변수 생성
-                var detailAddr = '';
-                if (roadAddress) {
-                    detailAddr = '도로명주소 : ' + roadAddress.address_name;
-                } else if (jibunAddress) {
-                    detailAddr = '지번주소 : ' + jibunAddress.address_name;
-                } else {
-                    detailAddr = '주소 정보를 찾을 수 없습니다.';
-                }
-                // 지도 중심의 좌표를 중상으로
-                map.setCenter(coords);
-                // 마커의 위치를 해당 좌표로 이동
-                marker.setPosition(coords);
-                // 이동한 마커를 지도에 표기
-                marker.setMap(map);
-
-                // 마커위의 위치를 표기하기위한 인포윈도우에 받아온 좌표의 주소 표기
-                infoWindow.setContent(detailAddr);
-                // 현재 받아온 주소를 p태그에 표기
-                resultText.innerText = detailAddr;
-                // 인포윈도우 오픈
-                infoWindow.open(map, marker);
-            }
-        });
-    }
-</script>
+<script th:src="@{/js/api/kakaomap.js}"></script>
 </body>
 </html>

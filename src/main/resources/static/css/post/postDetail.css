@@ -1,0 +1,100 @@
+body {
+    background-color: #f5f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    max-width: 900px;
+    margin: 2rem auto;
+}
+
+.card {
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+h2, h5 {
+    font-weight: 600;
+}
+
+.image-item img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.image-item img:hover {
+    transform: scale(1.05);
+}
+
+.like-btn {
+    font-size: 1.1rem;
+}
+
+.commentBox {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    background-color: white;
+}
+
+textarea[readonly] {
+    background-color: #fdfdfd;
+    border: none;
+    resize: none;
+}
+
+.btn-custom {
+    border-radius: 0.5rem;
+    font-weight: 600;
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.btn-outline-primary {
+    border-color: #4e73df;
+    color: #4e73df;
+    background-color: transparent;
+}
+.btn-outline-primary:hover {
+    background-color: #4e73df;
+    color: white;
+}
+
+.btn-outline-secondary {
+    border-color: #858796;
+    color: #858796;
+    background-color: transparent;
+}
+.btn-outline-secondary:hover {
+    background-color: #858796;
+    color: white;
+}
+
+.btn-danger {
+    background-color: white;
+    color: red;
+}
+.btn-danger:hover {
+    background-color: #c0392b;
+    color: white;
+}
+.custom-indicators [data-bs-target] {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #d1d5db; /* 기본 회색 */
+    margin: 0 6px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.custom-indicators .active {
+    background-color: #4e73df; /* 활성화 시 파란색 */
+    width: 14px;
+    height: 14px;
+}

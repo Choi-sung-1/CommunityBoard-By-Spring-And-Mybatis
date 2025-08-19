@@ -1,0 +1,99 @@
+body {
+    background-color: #f5f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: #4e73df;
+    color: white;
+    font-weight: 700;
+    font-size: 1.25rem;
+    border-radius: 0.75rem 0.75rem 0 0;
+    padding: 0.75rem 1rem;
+}
+
+.btn-custom {
+    border-radius: 0.5rem;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem; /* 버튼 높이 통일 */
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
+}
+.btn-block {
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: #4e73df;
+    border: none;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2e59d9;
+}
+
+.btn-outline-primary {
+    border-color: #4e73df;
+    color: #4e73df;
+    background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+    background-color: #4e73df;
+    color: white;
+}
+
+.btn-outline-success {
+    border-color: #4e73df; /* 기존 파랑 계열로 통일 */
+    color: #4e73df;
+    background-color: transparent;
+}
+
+.btn-outline-success:hover {
+    background-color: #4e73df;
+    color: white;
+}
+
+
+.btn-outline-secondary {
+    border-color: #858796;
+    color: #858796;
+    background-color: transparent;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #858796;
+    color: white;
+}
+
+.btn-outline-danger {
+    border-color: #e74a3b;
+    color: #e74a3b;
+    background-color: transparent;
+}
+
+.btn-outline-danger:hover {
+    background-color: #e74a3b;
+    color: white;
+}
+
+table th, table td {
+    vertical-align: middle !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #4e73df;
+    border-color: #4e73df;
+    color: white;
+}

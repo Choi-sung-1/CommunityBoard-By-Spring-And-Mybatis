@@ -30,6 +30,7 @@
         
   
   📂 프로젝트 구조
+  
     toyProject/
      ├─ src/
      │  ├─ main/
@@ -41,6 +42,7 @@
      └─ README.md
   
   🚀 주요 기능
+  
     - 회원가입 / 로그인 (Spring Security + BCrypt)
     - 게시글 작성, 수정, 삭제
     - 게시글 목록 조회 및 페이징 처리
@@ -52,6 +54,7 @@
     - 비동기 통신(Fetch API) 적용 (중복체크 등)
       
   🖥 실행 방법
+  
       # 1. 프로젝트 클론
         -git clone https://github.com/username/toyProject.git
         -cd toyProject

@@ -72,7 +72,8 @@
       # 1. 프로젝트 클론
         -git clone https://github.com/username/toyProject.git
         -cd toyProject
-      # 2.DB 설정 : application.properites에서 H2 DB 설정 확인 가능
-      # 3. 빌드 & 실행
-      # 4. 서버 실행 후 :localhost:8080
+      # 2.DB 설정 : application.properites에서 H2 DB 설정 변경
+      # 3 config/WebConfig 클래스 설정: 이미지 저장 경로 변경
+      # 4. 빌드 & 실행
+      # 5. 서버 실행 후 :localhost:8080
       

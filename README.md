@@ -32,25 +32,24 @@ Spring Boot 기반으로 개발한 기본 게시판 웹 애플리케이션입니
 ---
 
 ## 📂 3. 프로젝트 구조 (간략화)
-
-toyProject
-┣ 📂 src
-┃ ┣ 📂 main
-┃ ┃ ┣ 📂 java/com/project/toyProject
-┃ ┃ ┃ ┣ 📂 config # 애플리케이션 전반 설정 파일
-┃ ┃ ┃ ┣ 📂 controller # Controller 계층
-┃ ┃ ┃ ┣ 📂 dao # Repository 계층
-┃ ┃ ┃ ┣ 📂 domain # VO, DTO 클래스
-┃ ┃ ┃ ┣ 📂 interceptor # 요청 전후 처리 담당 클래스
-┃ ┃ ┃ ┣ 📂 mapper # MyBatis Mapper 인터페이스
-┃ ┃ ┃ ┣ 📂 service # 비즈니스 로직 관련 클래스
-┃ ┃ ┃ ┣ 📂 validation # 입력값 검증 관련 클래스
-┃ ┃ ┣ 📂 resources
-┃ ┃ ┃ ┣ 📂 mapper # MyBatis Mapper XML
-┃ ┃ ┃ ┣ 📂 templates # Thymeleaf HTML 파일
-┃ ┃ ┃ ┣ 📂 static/css # CSS
-┃ ┃ ┃ ┣ 📂 static/js # JavaScript
-┗ 📄 pom.xml
+    toyProject
+    ┣ 📂 src
+    ┃ ┣ 📂 main
+    ┃ ┃ ┣ 📂 java/com/project/toyProject
+    ┃ ┃ ┃ ┣ 📂 config # 애플리케이션 전반 설정 파일
+    ┃ ┃ ┃ ┣ 📂 controller # Controller 계층
+    ┃ ┃ ┃ ┣ 📂 dao # Repository 계층
+    ┃ ┃ ┃ ┣ 📂 domain # VO, DTO 클래스
+    ┃ ┃ ┃ ┣ 📂 interceptor # 요청 전후 처리 담당 클래스
+    ┃ ┃ ┃ ┣ 📂 mapper # MyBatis Mapper 인터페이스
+    ┃ ┃ ┃ ┣ 📂 service # 비즈니스 로직 관련 클래스
+    ┃ ┃ ┃ ┣ 📂 validation # 입력값 검증 관련 클래스
+    ┃ ┃ ┣ 📂 resources
+    ┃ ┃ ┃ ┣ 📂 mapper # MyBatis Mapper XML
+    ┃ ┃ ┃ ┣ 📂 templates # Thymeleaf HTML 파일
+    ┃ ┃ ┃ ┣ 📂 static/css # CSS
+    ┃ ┃ ┃ ┣ 📂 static/js # JavaScript
+    ┗ 📄 pom.xml
 
 ---
 

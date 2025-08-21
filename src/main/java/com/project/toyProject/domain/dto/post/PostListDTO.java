@@ -14,11 +14,8 @@ public class PostListDTO {
     private Long postReadCount;
 
 
-    public String getFormattedPostRegisterDate() {
-        return postRegisterDate.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
-    }
 
     public String getFormattedPostUpdateDate() {
-        return postUpdateDate.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
+        return postUpdateDate.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH:mm"));
     }
 }

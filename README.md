@@ -1,15 +1,20 @@
 📝 Toy Project - 게시판 웹 애플리케이션
 
   📌 1.프로젝트 소개
-      Spring Boot 기반으로 개발한 기본 게시판 웹 애플리케이션입니다.
-      회원 관리부터 시작해서 게시글 작성,댓글,좋아요,페이징 처리,카카오맵 API를 이용한 위치기능까지 포함되어있습니다.
-      실무에서 자주 사용되는 기능들을 학습하고 적용해보는 기본 토이 프로젝트입니다.
+        Spring Boot 기반으로 개발한 기본 게시판 웹 애플리케이션입니다.
+        회원 관리부터 시작해서 게시글 작성,댓글,좋아요,페이징 처리,카카오맵 API를 이용한 위치기능까지 포함되어있습니다.
+        실무에서 자주 사용되는 기능들을 학습하고 적용해보는 기본 토이 프로젝트입니다.
   
   ⚙️ 2.기술 스택
+  
       Backend: 
+      
         - Java 17,Spring Boot,Spring MVC,MyBatis,Spring Security/BCrypt
+        
       Frotend: 
+      
         - Thymeleaf,HTML,CSS,JavaScript,BootStrap,Fetch API(Ajax)비동기 통신
+        
       DataBase: 
         -H2(테스트용)
       API/라이브러리: 

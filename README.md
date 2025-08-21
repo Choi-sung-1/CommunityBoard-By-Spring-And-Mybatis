@@ -80,6 +80,7 @@ Spring Boot 기반으로 개발한 기본 게시판 웹 애플리케이션입니
 ```bash
 git clone https://github.com/username/toyProject.git
 cd toyProject
+```
 2.DB 설정: application.properties에서 H2 DB 설정 변경
 3.config/WebConfig 클래스 설정: 이미지 저장 경로 변경
 4.resource/templates/api/kakaomap.html에 script태그의 APPKEY에 카카오에서 발급한 본인의 AppKey로 변경

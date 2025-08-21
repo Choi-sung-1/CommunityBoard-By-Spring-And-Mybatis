@@ -29,21 +29,35 @@
         - IntelliJ IDEA,Git / GitHub
         
   
-  📂 프로젝트 구조
+  📂 3.프로젝트 구조(간략화)
   
-    toyProject/
-     ├─ src/
-     │  ├─ main/
-     │  │  ├─ java/com/project/toyProject/  # Controller, Service,Repository, Mapper, VO, DTO, 등
-     │  │  └─ resources/                    # application.yml, Mapper XML 등 설정
-     │  └─ test/                            # 테스트 코드
-     ├─ build.gradle                        # Gradle 빌드 설정
-     ├─ settings.gradle
-     └─ README.md
+    toyProject
+     ┣ 📂 src
+     ┃ ┣ 📂 main
+     ┃ ┃ ┣ 📂 java/com/project/toyProject
+     ┃ ┃ ┃ ┣ 📂 config       # 애플리케이션 전반 설정 파일
+     ┃ ┃ ┃ ┣ 📂 controller   # Controller 계층
+     ┃ ┃ ┃ ┣ 📂 dao          # Repository 계층
+     ┃ ┃ ┃ ┣ 📂 domain       # VO,DTO 클래스
+     ┃ ┃ ┃ ┣ 📂 interceptor  # 요청 전후 처리 담당 클래스
+     ┃ ┃ ┃ ┣ 📂 mapper       # mapper 인터페이스 (MyBatis Mapper)
+     ┃ ┃ ┃ ┣ 📂 service      # 비즈니스 로직 관련 클래스
+     ┃ ┃ ┃ ┣ 📂 validation   # 입력값 검증 관련 클래스
+     ┃ ┃ ┣ 📂 resources
+     ┃ ┃ ┃ ┣ 📂 mapper       # MyBatis Mapper XML
+     ┃ ┃ ┃ ┣ 📂 templates    # Thymeleaf HTML 파일
+     ┃ ┃ ┃ ┣ 📂 static/css   # CSS
+     ┃ ┃ ┃ ┣ 📂 static/js    # JavaScript
+     ┗ 📄 pom.xml
   
-  🚀 주요 기능
+  📝 4.테이블 구조
+ 
+  <img width="972" height="560" alt="스크린샷 2025-08-21 오후 2 27 45" src="https://github.com/user-attachments/assets/4a9138a0-6831-467c-a04a-5591563b38e7" />
+
+  🚀 5.주요 기능
   
     - 회원가입 / 로그인 (Spring Security + BCrypt)
+    - 회원 프로필 한줄소개,이미지 업로드,개인정보 작성,수정 가능
     - 게시글 작성, 수정, 삭제
     - 게시글 목록 조회 및 페이징 처리
     - 이미지 업로드 및 게시글 내 이미지 표시
@@ -53,7 +67,7 @@
     - 입력 검증 및 예외 처리
     - 비동기 통신(Fetch API) 적용 (중복체크 등)
       
-  🖥 실행 방법
+  🖥 6.실행 방법
   
       # 1. 프로젝트 클론
         -git clone https://github.com/username/toyProject.git
